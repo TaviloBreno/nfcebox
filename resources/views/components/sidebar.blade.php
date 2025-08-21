@@ -34,17 +34,20 @@
     
     <div class="position-absolute bottom-0 w-100 p-3">
         <div class="dropdown">
-            <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="sidebarUserDropdown">
                 <i class="fas fa-user-circle me-2"></i>
                 {{ Auth::user()->name }}
             </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarUserDropdown">
+                <li><a class="dropdown-item" href="#">
+                    <i class="fas fa-user me-2"></i>
+                    Meu Perfil
+                </a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="dropdown-item">
+                        <button type="submit" class="dropdown-item text-danger">
                             <i class="fas fa-sign-out-alt me-2"></i>
                             Sair
                         </button>
@@ -68,5 +71,19 @@
 
 .nav-link.active {
     font-weight: 500;
+}
+
+/* Fix dropdown positioning in sidebar */
+.position-absolute.bottom-0 .dropdown-menu {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    margin-bottom: 0.5rem;
+    transform: none;
+}
+
+.position-absolute.bottom-0 .dropdown-menu.show {
+    display: block;
 }
 </style>
