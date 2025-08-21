@@ -25,10 +25,10 @@
         @include('components.sidebar')
         
         <!-- Top Navbar for authenticated users -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom" style="margin-left: 250px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom main-content" style="margin-left: 250px;" id="mainNavbar">
             <div class="container-fluid">
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-link d-md-none" type="button" id="sidebarToggle">
+                    <button class="btn btn-link" type="button" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h4 class="mb-0 ms-3">@yield('page-title', 'Dashboard')</h4>
@@ -68,7 +68,7 @@
         </nav>
         
         <!-- Main Content with sidebar offset -->
-        <main class="py-4" style="margin-left: 250px;">
+        <main class="py-4 main-content" style="margin-left: 250px;">
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -156,6 +156,53 @@
             text-overflow: ellipsis;
         }
         
+        /* Sidebar Toggle Styles */
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px !important;
+        }
+        
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-header {
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-section-title {
+            display: none;
+        }
+        
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+        }
+        
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0 !important;
+        }
+        
+        .sidebar.collapsed .dropdown {
+            display: none;
+        }
+        
+        .sidebar.collapsed hr {
+            margin: 0.5rem 0;
+        }
+        
+        /* Adjust main content when sidebar is collapsed */
+        .main-content {
+            transition: margin-left 0.3s ease;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 70px !important;
+        }
+        
         /* Responsive Design */
          @media (max-width: 768px) {
              /* Hide sidebar on mobile */
@@ -210,9 +257,9 @@
          }
         
         @media (min-width: 769px) {
-            /* Hide mobile toggle on desktop */
+            /* Show toggle button on desktop */
             #sidebarToggle {
-                display: none !important;
+                display: block !important;
             }
         }
         
@@ -267,25 +314,48 @@
                  
              }, 200);
              
-             // Mobile sidebar toggle functionality
+             // Sidebar toggle functionality
              const sidebarToggle = document.getElementById('sidebarToggle');
              const sidebar = document.querySelector('.sidebar');
+             const mainContent = document.querySelectorAll('.main-content');
              
              if (sidebarToggle && sidebar) {
                  sidebarToggle.addEventListener('click', function(e) {
                      e.preventDefault();
-                     sidebar.classList.toggle('show');
+                     
+                     // Toggle sidebar collapsed state
+                     sidebar.classList.toggle('collapsed');
+                     
+                     // Toggle main content margin
+                     mainContent.forEach(function(element) {
+                         element.classList.toggle('sidebar-collapsed');
+                     });
+                     
+                     // Store state in localStorage
+                     const isCollapsed = sidebar.classList.contains('collapsed');
+                     localStorage.setItem('sidebarCollapsed', isCollapsed);
                  });
                  
-                 // Close sidebar when clicking outside on mobile
-                 document.addEventListener('click', function(e) {
-                     if (window.innerWidth <= 768 && 
-                         !e.target.closest('.sidebar') && 
-                         !e.target.closest('#sidebarToggle') &&
-                         sidebar.classList.contains('show')) {
-                         sidebar.classList.remove('show');
-                     }
-                 });
+                 // Restore sidebar state from localStorage
+                 const savedState = localStorage.getItem('sidebarCollapsed');
+                 if (savedState === 'true') {
+                     sidebar.classList.add('collapsed');
+                     mainContent.forEach(function(element) {
+                         element.classList.add('sidebar-collapsed');
+                     });
+                 }
+                 
+                 // Mobile specific behavior
+                 if (window.innerWidth <= 768) {
+                     // Close sidebar when clicking outside on mobile
+                     document.addEventListener('click', function(e) {
+                         if (!e.target.closest('.sidebar') && 
+                             !e.target.closest('#sidebarToggle') &&
+                             sidebar.classList.contains('show')) {
+                             sidebar.classList.remove('show');
+                         }
+                     });
+                 }
              }
          });
     </script>

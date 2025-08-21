@@ -1,34 +1,40 @@
 <div class="sidebar bg-dark text-white vh-100 position-fixed" style="width: 250px; z-index: 1000;">
-    <div class="p-3">
-        <h5 class="mb-0">{{ config('app.name', 'Laravel') }}</h5>
+    <div class="p-3 sidebar-header">
+        <h5 class="mb-0 sidebar-text">{{ config('app.name', 'Laravel') }}</h5>
     </div>
     
     <nav class="nav flex-column px-3">
         <a class="nav-link text-white {{ request()->routeIs('home') ? 'active bg-primary rounded' : '' }}" href="{{ route('home') }}">
             <i class="fas fa-home me-2"></i>
-            Dashboard
-        </a>
-        
-        <a class="nav-link text-white {{ request()->routeIs('profile.*') ? 'active bg-primary rounded' : '' }}" href="#">
-            <i class="fas fa-user me-2"></i>
-            Perfil
-        </a>
-        
-        <a class="nav-link text-white {{ request()->routeIs('settings.*') ? 'active bg-primary rounded' : '' }}" href="#">
-            <i class="fas fa-cog me-2"></i>
-            Configurações
+            <span class="sidebar-text">Dashboard</span>
         </a>
         
         <hr class="text-white-50">
         
-        <a class="nav-link text-white {{ request()->routeIs('users.*') ? 'active bg-primary rounded' : '' }}" href="#">
+        <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">CADASTROS</h6>
+        
+        <a class="nav-link text-white {{ request()->routeIs('customers.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('customers.index') }}">
             <i class="fas fa-users me-2"></i>
-            Usuários
+            <span class="sidebar-text">Clientes</span>
         </a>
         
-        <a class="nav-link text-white {{ request()->routeIs('reports.*') ? 'active bg-primary rounded' : '' }}" href="#">
-            <i class="fas fa-chart-bar me-2"></i>
-            Relatórios
+        <a class="nav-link text-white {{ request()->routeIs('products.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('products.index') }}">
+            <i class="fas fa-box me-2"></i>
+            <span class="sidebar-text">Produtos</span>
+        </a>
+        
+        <hr class="text-white-50">
+        
+        <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">SISTEMA</h6>
+        
+        <a class="nav-link text-white {{ request()->routeIs('profile.*') ? 'active bg-primary rounded' : '' }}" href="#">
+            <i class="fas fa-user me-2"></i>
+            <span class="sidebar-text">Perfil</span>
+        </a>
+        
+        <a class="nav-link text-white {{ request()->routeIs('settings.*') ? 'active bg-primary rounded' : '' }}" href="#">
+            <i class="fas fa-cog me-2"></i>
+            <span class="sidebar-text">Configurações</span>
         </a>
     </nav>
     
