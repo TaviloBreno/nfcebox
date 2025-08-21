@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\CustomerController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -37,3 +38,8 @@ Route::middleware('auth')->group(function () {
 
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Customer Routes - Protected with auth middleware
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('customers', CustomerController::class);
+});
