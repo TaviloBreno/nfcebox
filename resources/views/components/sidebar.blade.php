@@ -1,4 +1,4 @@
-<div class="bg-dark text-white vh-100 position-fixed" style="width: 250px; z-index: 1000;">
+<div class="sidebar bg-dark text-white vh-100 position-fixed" style="width: 250px; z-index: 1000;">
     <div class="p-3">
         <h5 class="mb-0">{{ config('app.name', 'Laravel') }}</h5>
     </div>
@@ -65,25 +65,12 @@
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-radius: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
 }
 
 .nav-link.active {
-    font-weight: 500;
-}
-
-/* Fix dropdown positioning in sidebar */
-.position-absolute.bottom-0 .dropdown-menu {
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    margin-bottom: 0.5rem;
-    transform: none;
-}
-
-.position-absolute.bottom-0 .dropdown-menu.show {
-    display: block;
+    background-color: #0d6efd;
+    border-radius: 5px;
 }
 </style>

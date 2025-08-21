@@ -45,5 +45,12 @@ class DatabaseSeeder extends Seeder
         User::factory(5)->create([
             'email_verified_at' => now(),
         ]);
+
+        // Chamar seeders específicos
+        $this->call([
+            CompanyConfigSeeder::class,
+            CustomerSeeder::class,
+            ProductSeeder::class,
+        ]);
     }
 }

@@ -135,23 +135,159 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Custom JS for dropdown functionality -->
+    <!-- CSS for dropdowns and responsive design -->
+    <style>
+        .dropdown-menu {
+            z-index: 1050;
+            max-width: 250px;
+            white-space: nowrap;
+        }
+        
+        /* Fix navbar dropdown positioning to prevent horizontal scroll */
+        .navbar .dropdown-menu {
+            right: 0;
+            left: auto;
+            transform: none;
+        }
+        
+        /* Ensure dropdown items don't overflow */
+        .dropdown-item {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Responsive Design */
+         @media (max-width: 768px) {
+             /* Hide sidebar on mobile */
+             .sidebar {
+                 transform: translateX(-100%);
+                 transition: transform 0.3s ease-in-out;
+                 z-index: 1050;
+             }
+             
+             .sidebar.show {
+                 transform: translateX(0);
+                 box-shadow: 0 0 20px rgba(0,0,0,0.5);
+             }
+             
+             /* Overlay for mobile sidebar */
+             .sidebar.show::after {
+                 content: '';
+                 position: fixed;
+                 top: 0;
+                 left: 250px;
+                 right: 0;
+                 bottom: 0;
+                 background: rgba(0,0,0,0.5);
+                 z-index: -1;
+             }
+             
+             /* Adjust navbar for mobile */
+             .navbar {
+                 margin-left: 0 !important;
+                 padding-left: 1rem;
+                 padding-right: 1rem;
+             }
+             
+             /* Adjust main content for mobile */
+             main {
+                 margin-left: 0 !important;
+                 padding: 1rem;
+             }
+             
+             /* Show mobile toggle button */
+             #sidebarToggle {
+                 display: block !important;
+             }
+             
+             /* Adjust dropdown positioning on mobile */
+             .navbar .dropdown-menu {
+                 position: absolute;
+                 right: 1rem;
+                 left: auto;
+                 min-width: 200px;
+             }
+         }
+        
+        @media (min-width: 769px) {
+            /* Hide mobile toggle on desktop */
+            #sidebarToggle {
+                display: none !important;
+            }
+        }
+        
+        /* Tablet adjustments */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .navbar, main {
+                margin-left: 200px;
+            }
+        }
+    </style>
+    
+    <!-- Working dropdown implementation -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all dropdowns
-            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-                return new bootstrap.Dropdown(dropdownToggleEl);
-            });
-            
-            // Sidebar toggle for mobile
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function() {
-                    // Add mobile sidebar toggle functionality if needed
+            // Wait a bit for Bootstrap to fully load
+            setTimeout(function() {
+                // Get all dropdown toggles
+                const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+                
+                dropdownToggles.forEach(function(toggle) {
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Close all other dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+                            if (menu !== toggle.nextElementSibling) {
+                                menu.classList.remove('show');
+                            }
+                        });
+                        
+                        // Toggle current dropdown
+                        const menu = toggle.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.classList.toggle('show');
+                        }
+                    });
                 });
-            }
-        });
+                
+                // Close dropdowns when clicking outside
+                 document.addEventListener('click', function(e) {
+                     if (!e.target.closest('.dropdown')) {
+                         document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                             menu.classList.remove('show');
+                         });
+                     }
+                 });
+                 
+             }, 200);
+             
+             // Mobile sidebar toggle functionality
+             const sidebarToggle = document.getElementById('sidebarToggle');
+             const sidebar = document.querySelector('.sidebar');
+             
+             if (sidebarToggle && sidebar) {
+                 sidebarToggle.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     sidebar.classList.toggle('show');
+                 });
+                 
+                 // Close sidebar when clicking outside on mobile
+                 document.addEventListener('click', function(e) {
+                     if (window.innerWidth <= 768 && 
+                         !e.target.closest('.sidebar') && 
+                         !e.target.closest('#sidebarToggle') &&
+                         sidebar.classList.contains('show')) {
+                         sidebar.classList.remove('show');
+                     }
+                 });
+             }
+         });
     </script>
 </body>
 </html>
