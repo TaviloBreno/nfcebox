@@ -13,11 +13,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Criar usuário administrador
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Administrador',
+            'email' => 'admin@nfcebox.com',
+            'email_verified_at' => now(),
+        ]);
+
+        // Criar usuário de teste
+        User::factory()->create([
+            'name' => 'Usuário Teste',
+            'email' => 'teste@nfcebox.com',
+            'email_verified_at' => now(),
+        ]);
+
+        // Criar usuário operador
+        User::factory()->create([
+            'name' => 'João Silva',
+            'email' => 'joao@nfcebox.com',
+            'email_verified_at' => now(),
+        ]);
+
+        // Criar usuário gerente
+        User::factory()->create([
+            'name' => 'Maria Santos',
+            'email' => 'maria@nfcebox.com',
+            'email_verified_at' => now(),
+        ]);
+
+        // Criar mais usuários aleatórios para teste
+        User::factory(5)->create([
+            'email_verified_at' => now(),
         ]);
     }
 }
