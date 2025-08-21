@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\SaleController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -47,6 +48,14 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('products', ProductController::class);
+    
+    // Sales Routes - Gerenciamento de Vendas
+    Route::prefix('sales')->name('sales.')->group(function () {
+        Route::get('/', [SaleController::class, 'index'])->name('index');
+        Route::get('/{sale}', [SaleController::class, 'show'])->name('show');
+        Route::put('/{sale}/cancel', [SaleController::class, 'cancel'])->name('cancel');
+        Route::get('/api/statistics', [SaleController::class, 'statistics'])->name('statistics');
+    });
     
     // POS Routes - Sistema de PDV
     Route::prefix('pos')->name('pos.')->group(function () {

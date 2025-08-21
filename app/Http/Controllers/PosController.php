@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Services\Sales\SaleNumberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -206,7 +207,7 @@ class PosController extends Controller
     {
         $request->validate([
             'customer_id' => 'nullable|exists:customers,id',
-            'payment_method' => 'required|string',
+            'payment_method' => 'required|string|in:dinheiro,cartao_credito,cartao_debito,pix,boleto',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -216,31 +217,46 @@ class PosController extends Controller
         try {
             DB::beginTransaction();
             
-            // Verificar estoque dos produtos
+            // 1. Validar estoque suficiente para todos os produtos
+            $stockErrors = [];
             foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
+                $product = Product::lockForUpdate()->find($item['product_id']);
+                if (!$product) {
+                    throw new \Exception("Produto não encontrado: ID {$item['product_id']}");
+                }
+                
                 if ($product->stock < $item['quantity']) {
-                    throw new \Exception("Estoque insuficiente para o produto: {$product->name}");
+                    $stockErrors[] = "Estoque insuficiente para {$product->name}. Disponível: {$product->stock}, Solicitado: {$item['quantity']}";
                 }
             }
             
-            // Calcular total da venda
+            if (!empty($stockErrors)) {
+                throw new \Exception(implode('; ', $stockErrors));
+            }
+            
+            // 2. Calcular total da venda
             $total = collect($request->items)->sum(function ($item) {
                 return $item['quantity'] * $item['price'];
             });
             
-            // Criar a venda
+            // 3. Gerar número interno da venda
+            $saleNumberService = new SaleNumberService();
+            $saleNumber = $saleNumberService->generateNextNumber();
+            
+            // 4. Criar a venda com status inicial authorized_pending
             $sale = Sale::create([
+                'number' => $saleNumber,
                 'customer_id' => $request->customer_id,
                 'total' => $total,
                 'payment_method' => $request->payment_method,
-                'status' => 'draft'
+                'status' => 'authorized_pending' // Status inicial antes da autorização SEFAZ
             ]);
             
-            // Adicionar itens da venda
+            // 5. Adicionar itens da venda e debitar estoque
             foreach ($request->items as $item) {
                 $product = Product::find($item['product_id']);
                 
+                // Criar item da venda
                 $sale->saleItems()->create([
                     'product_id' => $item['product_id'],
                     'qty' => $item['quantity'],
@@ -248,34 +264,49 @@ class PosController extends Controller
                     'total' => $item['quantity'] * $item['price']
                 ]);
                 
-                // Atualizar estoque
+                // Debitar estoque do produto
                 $product->decrement('stock', $item['quantity']);
+                
+                Log::info('Estoque debitado', [
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'quantity_sold' => $item['quantity'],
+                    'stock_remaining' => $product->fresh()->stock
+                ]);
             }
-            
-            // Confirmar a venda e gerar número usando o método do modelo
-            $sale->status = 'authorized';
-            $sale->save(); // Isso irá gerar o número automaticamente
-            
-            $saleNumber = $sale->number;
             
             DB::commit();
             
             // Limpar carrinho da sessão
             session()->forget('pos_cart');
             
+            Log::info('Venda finalizada com sucesso', [
+                'sale_id' => $sale->id,
+                'sale_number' => $saleNumber,
+                'total' => $total,
+                'payment_method' => $request->payment_method,
+                'customer_id' => $request->customer_id
+            ]);
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Venda finalizada com sucesso!',
                 'sale_number' => $saleNumber,
-                'sale_id' => $sale->id
+                'sale_id' => $sale->id,
+                'total' => $total
             ]);
             
         } catch (\Exception $e) {
             DB::rollBack();
             
+            Log::error('Erro ao finalizar venda', [
+                'error' => $e->getMessage(),
+                'request_data' => $request->all()
+            ]);
+            
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Erro ao finalizar venda: ' . $e->getMessage()
             ], 422);
         }
     }

@@ -19,7 +19,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     @auth
         <!-- Sidebar -->
         @include('components.sidebar')
@@ -68,7 +68,7 @@
         </nav>
         
         <!-- Main Content with sidebar offset -->
-        <main class="py-4 main-content" style="margin-left: 250px;">
+        <main class="py-4 main-content flex-grow-1" style="margin-left: 250px;">
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -111,7 +111,7 @@
         </nav>
         
         <!-- Main Content for guests -->
-        <main class="py-4">
+        <main class="py-4 flex-grow-1">
             <div class="container">
                 @yield('content')
             </div>
@@ -119,7 +119,7 @@
     @endauth
 
     <!-- Footer -->
-    <footer class="bg-light mt-5 py-4 @auth main-content @endauth" @auth style="margin-left: 250px;" @endauth>
+    <footer class="bg-light py-4 mt-auto @auth main-content @endauth" @auth style="margin-left: 250px;" @endauth>
         <div class="container @auth container-fluid @endauth">
             <div class="row">
                 <div class="col-md-6">

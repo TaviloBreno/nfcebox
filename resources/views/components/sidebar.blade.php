@@ -18,6 +18,11 @@
             <span class="sidebar-text">PDV</span>
         </a>
         
+        <a class="nav-link text-white {{ request()->routeIs('sales.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('sales.index') }}">
+            <i class="fas fa-receipt me-2"></i>
+            <span class="sidebar-text">Vendas</span>
+        </a>
+        
         <hr class="text-white-50">
         
         <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">CADASTROS</h6>
@@ -42,9 +47,14 @@
         </a>
         
         @if(Auth::user()->is_admin)
-            <a class="nav-link text-white {{ request()->routeIs('configurations.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('configurations.index') }}">
+            <a class="nav-link text-white {{ request()->routeIs('configurations.index') || request()->routeIs('configurations.edit') ? 'active bg-primary rounded' : '' }}" href="{{ route('configurations.index') }}">
                 <i class="fas fa-cog me-2"></i>
                 <span class="sidebar-text">Configurações</span>
+            </a>
+            
+            <a class="nav-link text-white {{ request()->routeIs('configurations.users*') ? 'active bg-primary rounded' : '' }}" href="{{ route('configurations.users') }}">
+                <i class="fas fa-users-cog me-2"></i>
+                <span class="sidebar-text">Usuários</span>
             </a>
         @endif
     </nav>
