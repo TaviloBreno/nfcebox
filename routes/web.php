@@ -7,6 +7,9 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ConfigurationController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -44,4 +47,35 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('products', ProductController::class);
+    
+    // POS Routes - Sistema de PDV
+    Route::prefix('pos')->name('pos.')->group(function () {
+        Route::get('/', [PosController::class, 'index'])->name('index');
+        Route::get('/search-customers', [PosController::class, 'searchCustomers'])->name('search.customers');
+        Route::get('/search-products', [PosController::class, 'searchProducts'])->name('search.products');
+        Route::post('/cart/add', [PosController::class, 'addToCart'])->name('cart.add');
+        Route::put('/cart/update', [PosController::class, 'updateCart'])->name('cart.update');
+        Route::delete('/cart/remove', [PosController::class, 'removeFromCart'])->name('cart.remove');
+        Route::delete('/cart/clear', [PosController::class, 'clearCart'])->name('cart.clear');
+        Route::post('/finalize', [PosController::class, 'finalizeSale'])->name('finalize');
+    });
+    
+    // Profile Routes
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('show');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::put('/update', [ProfileController::class, 'update'])->name('update');
+    });
+    
+    // Configuration Routes - Only for administrators
+    Route::middleware('admin')->prefix('configurations')->name('configurations.')->group(function () {
+        Route::get('/', [ConfigurationController::class, 'index'])->name('index');
+        Route::get('/edit', [ConfigurationController::class, 'edit'])->name('edit');
+        Route::put('/update', [ConfigurationController::class, 'update'])->name('update');
+        
+        // User management routes
+        Route::get('/users', [ConfigurationController::class, 'users'])->name('users');
+        Route::put('/users/{user}', [ConfigurationController::class, 'updateUser'])->name('users.update');
+        Route::put('/users/{user}/permissions', [ConfigurationController::class, 'updateUserPermissions'])->name('users.permissions');
+    });
 });

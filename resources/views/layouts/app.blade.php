@@ -119,14 +119,14 @@
     @endauth
 
     <!-- Footer -->
-    <footer class="bg-light mt-5 py-4">
-        <div class="container">
+    <footer class="bg-light mt-5 py-4 @auth main-content @endauth" @auth style="margin-left: 250px;" @endauth>
+        <div class="container @auth container-fluid @endauth">
             <div class="row">
                 <div class="col-md-6">
                     <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. Todos os direitos reservados.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="mb-0">Desenvolvido com <span class="text-danger">&hearts;</span> usando Laravel e Bootstrap</p>
+                    <p class="mb-0">Customizado pela <strong>B-Web</strong> com <span class="text-danger">&hearts;</span> usando Laravel e Bootstrap</p>
                 </div>
             </div>
         </div>
@@ -204,74 +204,175 @@
         }
         
         /* Responsive Design */
-         @media (max-width: 768px) {
-             /* Hide sidebar on mobile */
-             .sidebar {
-                 transform: translateX(-100%);
-                 transition: transform 0.3s ease-in-out;
-                 z-index: 1050;
-             }
-             
-             .sidebar.show {
-                 transform: translateX(0);
-                 box-shadow: 0 0 20px rgba(0,0,0,0.5);
-             }
-             
-             /* Overlay for mobile sidebar */
-             .sidebar.show::after {
-                 content: '';
-                 position: fixed;
-                 top: 0;
-                 left: 250px;
-                 right: 0;
-                 bottom: 0;
-                 background: rgba(0,0,0,0.5);
-                 z-index: -1;
-             }
-             
-             /* Adjust navbar for mobile */
-             .navbar {
-                 margin-left: 0 !important;
-                 padding-left: 1rem;
-                 padding-right: 1rem;
-             }
-             
-             /* Adjust main content for mobile */
-             main {
-                 margin-left: 0 !important;
-                 padding: 1rem;
-             }
-             
-             /* Show mobile toggle button */
-             #sidebarToggle {
-                 display: block !important;
-             }
-             
-             /* Adjust dropdown positioning on mobile */
-             .navbar .dropdown-menu {
-                 position: absolute;
-                 right: 1rem;
-                 left: auto;
-                 min-width: 200px;
-             }
-         }
-        
-        @media (min-width: 769px) {
-            /* Show toggle button on desktop */
-            #sidebarToggle {
-                display: block !important;
+        /* Mobile devices (up to 768px) */
+        @media (max-width: 768px) {
+            /* Hide sidebar on mobile */
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 1050;
+                width: 280px !important;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            }
+            
+            /* Mobile overlay */
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1040;
+                display: none;
+            }
+            
+            .sidebar-overlay.show {
+                display: block;
+            }
+            
+            /* Adjust navbar for mobile */
+            .navbar {
+                margin-left: 0 !important;
+                padding: 0.5rem 1rem;
+                position: sticky;
+                top: 0;
+                z-index: 1030;
+            }
+            
+            /* Adjust main content for mobile */
+            main {
+                margin-left: 0 !important;
+                padding: 0.5rem;
+            }
+            
+            /* Container adjustments */
+            .container-fluid {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            /* Card adjustments */
+            .card {
+                margin-bottom: 1rem;
+                border-radius: 0.5rem;
+            }
+            
+            /* Table responsiveness */
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+            
+            /* Button adjustments */
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+            
+            .btn-group .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            /* Form adjustments */
+            .form-control, .form-select {
+                font-size: 1rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            /* Dropdown positioning */
+            .navbar .dropdown-menu {
+                position: absolute;
+                right: 1rem;
+                left: auto;
+                min-width: 200px;
+                max-width: calc(100vw - 2rem);
+            }
+            
+            /* Hide some elements on very small screens */
+            .d-none-mobile {
+                display: none !important;
             }
         }
         
-        /* Tablet adjustments */
-        @media (max-width: 1024px) and (min-width: 769px) {
+        /* Tablet devices (769px to 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
             .sidebar {
-                width: 200px;
+                width: 220px !important;
             }
             
             .navbar, main {
-                margin-left: 200px;
+                margin-left: 220px !important;
             }
+            
+            .main-content.sidebar-collapsed {
+                margin-left: 70px !important;
+            }
+            
+            /* Adjust container for tablets */
+            .container-fluid {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* Table adjustments for tablets */
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            /* Card adjustments */
+            .card-body {
+                padding: 1rem;
+            }
+            
+            /* Button group adjustments */
+            .btn-group .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Desktop and larger screens */
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 250px !important;
+            }
+            
+            .navbar, main {
+                margin-left: 250px !important;
+            }
+            
+            .main-content.sidebar-collapsed {
+                margin-left: 70px !important;
+            }
+        }
+        
+        /* Large desktop screens */
+        @media (min-width: 1400px) {
+            .container-fluid {
+                max-width: 1320px;
+                margin: 0 auto;
+            }
+        }
+        
+        /* Common responsive utilities */
+        @media (max-width: 576px) {
+            .col-form-label {
+                margin-bottom: 0.25rem;
+            }
+            
+            .row > * {
+                margin-bottom: 0.75rem;
+            }
+            
+            h1, .h1 { font-size: 1.75rem; }
+            h2, .h2 { font-size: 1.5rem; }
+            h3, .h3 { font-size: 1.25rem; }
+            h4, .h4 { font-size: 1.1rem; }
         }
     </style>
     
@@ -320,42 +421,91 @@
              const mainContent = document.querySelectorAll('.main-content');
              
              if (sidebarToggle && sidebar) {
-                 sidebarToggle.addEventListener('click', function(e) {
+                 // Create overlay for mobile
+                 let overlay = document.querySelector('.sidebar-overlay');
+                 if (!overlay) {
+                     overlay = document.createElement('div');
+                     overlay.className = 'sidebar-overlay';
+                     document.body.appendChild(overlay);
+                 }
+                 
+                 // Function to handle sidebar toggle based on screen size
+                 function handleSidebarToggle(e) {
                      e.preventDefault();
                      
-                     // Toggle sidebar collapsed state
-                     sidebar.classList.toggle('collapsed');
-                     
-                     // Toggle main content margin
-                     mainContent.forEach(function(element) {
-                         element.classList.toggle('sidebar-collapsed');
-                     });
-                     
-                     // Store state in localStorage
-                     const isCollapsed = sidebar.classList.contains('collapsed');
-                     localStorage.setItem('sidebarCollapsed', isCollapsed);
-                 });
-                 
-                 // Restore sidebar state from localStorage
-                 const savedState = localStorage.getItem('sidebarCollapsed');
-                 if (savedState === 'true') {
-                     sidebar.classList.add('collapsed');
-                     mainContent.forEach(function(element) {
-                         element.classList.add('sidebar-collapsed');
-                     });
+                     if (window.innerWidth <= 768) {
+                         // Mobile behavior
+                         sidebar.classList.toggle('show');
+                     } else {
+                         // Desktop behavior
+                         sidebar.classList.toggle('collapsed');
+                         
+                         // Toggle main content margin
+                         mainContent.forEach(function(element) {
+                             element.classList.toggle('sidebar-collapsed');
+                         });
+                         
+                         // Store state in localStorage
+                         const isCollapsed = sidebar.classList.contains('collapsed');
+                         localStorage.setItem('sidebarCollapsed', isCollapsed);
+                     }
                  }
                  
-                 // Mobile specific behavior
-                 if (window.innerWidth <= 768) {
-                     // Close sidebar when clicking outside on mobile
-                     document.addEventListener('click', function(e) {
-                         if (!e.target.closest('.sidebar') && 
-                             !e.target.closest('#sidebarToggle') &&
-                             sidebar.classList.contains('show')) {
-                             sidebar.classList.remove('show');
+                 // Add click event listener
+                 sidebarToggle.addEventListener('click', handleSidebarToggle);
+                 
+                 // Show/hide overlay with sidebar
+                 const observer = new MutationObserver(function(mutations) {
+                     mutations.forEach(function(mutation) {
+                         if (mutation.attributeName === 'class') {
+                             if (sidebar.classList.contains('show')) {
+                                 overlay.classList.add('show');
+                             } else {
+                                 overlay.classList.remove('show');
+                             }
                          }
                      });
+                 });
+                 observer.observe(sidebar, { attributes: true });
+                 
+                 // Close sidebar when clicking overlay
+                 overlay.addEventListener('click', function() {
+                     sidebar.classList.remove('show');
+                 });
+                 
+                 // Restore sidebar state from localStorage (only for desktop)
+                 if (window.innerWidth > 768) {
+                     const savedState = localStorage.getItem('sidebarCollapsed');
+                     if (savedState === 'true') {
+                         sidebar.classList.add('collapsed');
+                         mainContent.forEach(function(element) {
+                             element.classList.add('sidebar-collapsed');
+                         });
+                     }
                  }
+                 
+                 // Handle window resize
+                 window.addEventListener('resize', function() {
+                     if (window.innerWidth > 768) {
+                         sidebar.classList.remove('show');
+                         overlay.classList.remove('show');
+                         
+                         // Restore collapsed state for desktop
+                         const savedState = localStorage.getItem('sidebarCollapsed');
+                         if (savedState === 'true') {
+                             sidebar.classList.add('collapsed');
+                             mainContent.forEach(function(element) {
+                                 element.classList.add('sidebar-collapsed');
+                             });
+                         }
+                     } else {
+                         // Remove desktop classes on mobile
+                         sidebar.classList.remove('collapsed');
+                         mainContent.forEach(function(element) {
+                             element.classList.remove('sidebar-collapsed');
+                         });
+                     }
+                 });
              }
          });
     </script>
