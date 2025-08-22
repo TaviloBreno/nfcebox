@@ -4,20 +4,27 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Detalhes do Produto') }}</h4>
-                    <div>
-                        <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-edit"></i> {{ __('Editar') }}
-                        </a>
-                        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left"></i> {{ __('Voltar') }}
-                        </a>
+            <x-card>
+                <x-slot name="header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ __('Detalhes do Produto') }}</h4>
+                        <div>
+                            <x-button 
+                                href="{{ route('products.edit', $product) }}" 
+                                variant="outline-primary" 
+                                class="me-2" 
+                                icon="fas fa-edit">
+                                {{ __('Editar') }}
+                            </x-button>
+                            <x-button 
+                                href="{{ route('products.index') }}" 
+                                variant="outline-secondary" 
+                                icon="fas fa-arrow-left">
+                                {{ __('Voltar') }}
+                            </x-button>
+                        </div>
                     </div>
-                </div>
-
-                <div class="card-body">
+                </x-slot>
                     <!-- Informações Básicas -->
                     <div class="row mb-4">
                         <div class="col-12">
@@ -161,37 +168,41 @@
                                       onsubmit="return confirm('{{ __('Tem certeza que deseja excluir este produto?') }}\n\n{{ __('Esta ação não pode ser desfeita!') }}')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger me-md-2">
-                                        <i class="fas fa-trash"></i> {{ __('Excluir Produto') }}
-                                    </button>
+                                    <x-button 
+                                        type="submit" 
+                                        variant="outline-danger" 
+                                        class="me-md-2" 
+                                        icon="fas fa-trash">
+                                        {{ __('Excluir Produto') }}
+                                    </x-button>
                                 </form>
-                                <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">
-                                    <i class="fas fa-edit"></i> {{ __('Editar Produto') }}
-                                </a>
+                                <x-button 
+                                    href="{{ route('products.edit', $product) }}" 
+                                    variant="primary" 
+                                    icon="fas fa-edit">
+                                    {{ __('Editar Produto') }}
+                                </x-button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+            </x-card>
 
             <!-- Card com Vendas Relacionadas (se houver) -->
             @if($product->saleItems()->exists())
-                <div class="card mt-4">
-                    <div class="card-header">
+                <x-card class="mt-4">
+                    <x-slot name="header">
                         <h5 class="mb-0">
                             <i class="fas fa-shopping-cart"></i> {{ __('Vendas Relacionadas') }}
                         </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-info" role="alert">
-                            <i class="fas fa-info-circle"></i>
-                            {{ __('Este produto possui') }} <strong>{{ $product->saleItems()->count() }}</strong> 
-                            {{ __('item(ns) de venda associado(s).') }}
-                            <br>
-                            <small>{{ __('Por isso, não pode ser excluído até que todas as vendas sejam removidas.') }}</small>
-                        </div>
-                    </div>
-                </div>
+                    </x-slot>
+                    
+                    <x-alert type="info" icon="fas fa-info-circle">
+                        {{ __('Este produto possui') }} <strong>{{ $product->saleItems()->count() }}</strong> 
+                        {{ __('item(ns) de venda associado(s).') }}
+                        <br>
+                        <small>{{ __('Por isso, não pode ser excluído até que todas as vendas sejam removidas.') }}</small>
+                    </x-alert>
+                </x-card>
             @endif
         </div>
     </div>

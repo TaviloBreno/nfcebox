@@ -7,117 +7,94 @@
     <div class="row">
         <div class="col-12">
             <!-- Filtros -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-filter me-2"></i>
-                        Filtros
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <form method="GET" action="{{ route('reports.top-products') }}" class="row g-3">
-                        <div class="col-md-3">
-                            <label for="date_from" class="form-label">Data Inicial</label>
-                            <input type="date" class="form-control" id="date_from" name="date_from" 
-                                   value="{{ $request->date_from ?? now()->startOfMonth()->format('Y-m-d') }}" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="date_to" class="form-label">Data Final</label>
-                            <input type="date" class="form-control" id="date_to" name="date_to" 
-                                   value="{{ $request->date_to ?? now()->format('Y-m-d') }}" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="limit" class="form-label">Top</label>
-                            <select class="form-select" id="limit" name="limit">
-                                <option value="10" {{ ($request->limit ?? 10) == 10 ? 'selected' : '' }}>10</option>
-                                <option value="20" {{ ($request->limit ?? 10) == 20 ? 'selected' : '' }}>20</option>
-                                <option value="50" {{ ($request->limit ?? 10) == 50 ? 'selected' : '' }}>50</option>
-                                <option value="100" {{ ($request->limit ?? 10) == 100 ? 'selected' : '' }}>100</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="order_by" class="form-label">Ordenar por</label>
-                            <select class="form-select" id="order_by" name="order_by">
-                                <option value="quantity" {{ ($request->order_by ?? 'quantity') == 'quantity' ? 'selected' : '' }}>Quantidade</option>
-                                <option value="revenue" {{ ($request->order_by ?? 'quantity') == 'revenue' ? 'selected' : '' }}>Receita</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2">
-                                <i class="fas fa-search me-1"></i>
-                                Filtrar
-                            </button>
-                            <a href="{{ route('reports.top-products') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-1"></i>
-                                Limpar
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <x-card title="Filtros" icon="fas fa-filter" class="mb-4">
+                <form method="GET" action="{{ route('reports.top-products') }}" class="row g-3">
+                    <div class="col-md-3">
+                        <x-form-input 
+                            type="date" 
+                            name="date_from" 
+                            label="Data Inicial" 
+                            value="{{ $request->date_from ?? now()->startOfMonth()->format('Y-m-d') }}" 
+                            required />
+                    </div>
+                    <div class="col-md-3">
+                        <x-form-input 
+                            type="date" 
+                            name="date_to" 
+                            label="Data Final" 
+                            value="{{ $request->date_to ?? now()->format('Y-m-d') }}" 
+                            required />
+                    </div>
+                    <div class="col-md-2">
+                        <x-form-input 
+                            type="select" 
+                            name="limit" 
+                            label="Top" 
+                            value="{{ $request->limit ?? 10 }}">
+                            <option value="10" {{ ($request->limit ?? 10) == 10 ? 'selected' : '' }}>10</option>
+                            <option value="20" {{ ($request->limit ?? 10) == 20 ? 'selected' : '' }}>20</option>
+                            <option value="50" {{ ($request->limit ?? 10) == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ ($request->limit ?? 10) == 100 ? 'selected' : '' }}>100</option>
+                        </x-form-input>
+                    </div>
+                    <div class="col-md-2">
+                        <x-form-input 
+                            type="select" 
+                            name="order_by" 
+                            label="Ordenar por" 
+                            value="{{ $request->order_by ?? 'quantity' }}">
+                            <option value="quantity" {{ ($request->order_by ?? 'quantity') == 'quantity' ? 'selected' : '' }}>Quantidade</option>
+                            <option value="revenue" {{ ($request->order_by ?? 'quantity') == 'revenue' ? 'selected' : '' }}>Receita</option>
+                        </x-form-input>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <x-button 
+                            type="submit" 
+                            variant="primary" 
+                            icon="fas fa-search" 
+                            class="me-2">
+                            Filtrar
+                        </x-button>
+                        <x-button 
+                            href="{{ route('reports.top-products') }}" 
+                            variant="secondary" 
+                            icon="fas fa-times">
+                            Limpar
+                        </x-button>
+                    </div>
+                </form>
+            </x-card>
 
             @if(isset($topProducts))
             <!-- Resumo -->
             <div class="row mb-4">
                 <div class="col-md-3">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h4 class="mb-0">{{ $summary['total_products'] }}</h4>
-                                    <p class="mb-0">Produtos Vendidos</p>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-box fa-2x"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <x-stat-card 
+                        title="Produtos Vendidos" 
+                        value="{{ $summary['total_products'] }}" 
+                        icon="fas fa-box" 
+                        color="primary" />
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h4 class="mb-0">{{ number_format($summary['total_quantity']) }}</h4>
-                                    <p class="mb-0">Qtd. Total Vendida</p>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-cubes fa-2x"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <x-stat-card 
+                        title="Qtd. Total Vendida" 
+                        value="{{ number_format($summary['total_quantity']) }}" 
+                        icon="fas fa-cubes" 
+                        color="success" />
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h4 class="mb-0">R$ {{ number_format($summary['total_revenue'], 2, ',', '.') }}</h4>
-                                    <p class="mb-0">Receita Total</p>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-dollar-sign fa-2x"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <x-stat-card 
+                        title="Receita Total" 
+                        value="R$ {{ number_format($summary['total_revenue'], 2, ',', '.') }}" 
+                        icon="fas fa-dollar-sign" 
+                        color="info" />
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="mb-0">{{ $summary['period_from'] }} a {{ $summary['period_to'] }}</h6>
-                                    <p class="mb-0">Período</p>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-calendar fa-2x"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <x-stat-card 
+                        title="Período" 
+                        value="{{ $summary['period_from'] }} a {{ $summary['period_to'] }}" 
+                        icon="fas fa-calendar" 
+                        color="warning" />
                 </div>
             </div>
 
@@ -125,34 +102,18 @@
             <div class="row">
                 <!-- Gráfico -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-chart-bar me-2"></i>
-                                Top {{ $request->limit ?? 10 }} Produtos
-                                @if(($request->order_by ?? 'quantity') == 'quantity')
-                                    (por Quantidade)
-                                @else
-                                    (por Receita)
-                                @endif
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="productsChart" width="400" height="400"></canvas>
-                        </div>
-                    </div>
+                    <x-card 
+                        title="Top {{ $request->limit ?? 10 }} Produtos @if(($request->order_by ?? 'quantity') == 'quantity')(por Quantidade)@else(por Receita)@endif" 
+                        icon="fas fa-chart-bar">
+                        <canvas id="productsChart" width="400" height="400"></canvas>
+                    </x-card>
                 </div>
 
                 <!-- Top 5 Cards -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-trophy me-2"></i>
-                                Top 5 Produtos
-                            </h5>
-                        </div>
-                        <div class="card-body">
+                    <x-card 
+                        title="Top 5 Produtos" 
+                        icon="fas fa-trophy">
                             @foreach($topProducts->take(5) as $index => $product)
                             <div class="d-flex align-items-center mb-3 p-3 border rounded {{ $index == 0 ? 'bg-warning bg-opacity-10' : ($index == 1 ? 'bg-secondary bg-opacity-10' : ($index == 2 ? 'bg-info bg-opacity-10' : '')) }}">
                                 <div class="me-3">
@@ -180,30 +141,40 @@
                                 </div>
                             </div>
                             @endforeach
-                        </div>
-                    </div>
+                    </x-card>
                 </div>
             </div>
 
             <!-- Tabela Completa -->
-            <div class="card mt-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-table me-2"></i>
-                        Produtos Mais Vendidos
-                    </h5>
-                    <div>
-                        <a href="{{ route('reports.top-products.export-csv', request()->query()) }}" class="btn btn-success btn-sm me-2">
-                            <i class="fas fa-file-csv me-1"></i>
-                            CSV
-                        </a>
-                        <button class="btn btn-danger btn-sm" onclick="exportToPdf()">
-                            <i class="fas fa-file-pdf me-1"></i>
-                            PDF
-                        </button>
+            <x-card 
+                title="Produtos Mais Vendidos" 
+                icon="fas fa-table" 
+                class="mt-4">
+                <x-slot name="header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-table me-2"></i>
+                            Produtos Mais Vendidos
+                        </h5>
+                        <div>
+                            <x-button 
+                                href="{{ route('reports.top-products.export-csv', request()->query()) }}" 
+                                variant="success" 
+                                size="sm" 
+                                icon="fas fa-file-csv" 
+                                class="me-2">
+                                CSV
+                            </x-button>
+                            <x-button 
+                                variant="danger" 
+                                size="sm" 
+                                icon="fas fa-file-pdf" 
+                                onclick="exportToPdf()">
+                                PDF
+                            </x-button>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
+                </x-slot>
                     @if($topProducts->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="productsTable">
@@ -286,14 +257,18 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('products.show', $product->id) }}" 
-                                               class="btn btn-sm btn-outline-primary" title="Ver Produto">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('products.edit', $product->id) }}" 
-                                               class="btn btn-sm btn-outline-warning" title="Editar Produto">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <x-button 
+                                                href="{{ route('products.show', $product->id) }}" 
+                                                variant="outline-primary" 
+                                                size="sm" 
+                                                icon="fas fa-eye" 
+                                                title="Ver Produto" />
+                                            <x-button 
+                                                href="{{ route('products.edit', $product->id) }}" 
+                                                variant="outline-warning" 
+                                                size="sm" 
+                                                icon="fas fa-edit" 
+                                                title="Editar Produto" />
                                         </div>
                                     </td>
                                 </tr>
@@ -308,8 +283,7 @@
                         <p class="text-muted">Não há produtos vendidos no período selecionado.</p>
                     </div>
                     @endif
-                </div>
-            </div>
+            </x-card>
             @endif
         </div>
     </div>

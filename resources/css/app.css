@@ -1,5 +1,239 @@
+/**
+ * Main Application Stylesheet
+ * 
+ * This file imports all component and page-specific stylesheets
+ * following the DRY principle and maintaining separation of concerns
+ */
+
+/* Bootstrap Framework */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+/* Component Styles */
+@import 'components/common.css';
+@import 'components/sidebar.css';
+
+/* Page Styles */
+@import 'pages/reports.css';
+@import 'pages/profile.css';
+@import 'pages/nfce.css';
+@import 'pages/configurations.css';
+
+/* Global Variables */
+:root {
+    /* Primary Colors */
+    --primary-color: #007bff;
+    --primary-dark: #0056b3;
+    --primary-light: #66b3ff;
+    
+    /* Secondary Colors */
+    --secondary-color: #6c757d;
+    --secondary-dark: #545b62;
+    --secondary-light: #adb5bd;
+    
+    /* Success Colors */
+    --success-color: #28a745;
+    --success-dark: #1e7e34;
+    --success-light: #71dd8a;
+    
+    /* Danger Colors */
+    --danger-color: #dc3545;
+    --danger-dark: #bd2130;
+    --danger-light: #f1b0b7;
+    
+    /* Warning Colors */
+    --warning-color: #ffc107;
+    --warning-dark: #d39e00;
+    --warning-light: #fff3cd;
+    
+    /* Info Colors */
+    --info-color: #17a2b8;
+    --info-dark: #117a8b;
+    --info-light: #9fdbef;
+    
+    /* Neutral Colors */
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --white: #ffffff;
+    --black: #000000;
+    
+    /* Gray Scale */
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    /* Border Radius */
+    --border-radius-sm: 0.25rem;
+    --border-radius-md: 0.375rem;
+    --border-radius-lg: 0.5rem;
+    --border-radius-xl: 0.75rem;
+    --border-radius-pill: 50rem;
+    
+    /* Shadows */
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    
+    /* Typography */
+    --font-family-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family-mono: 'Courier New', Courier, monospace;
+    
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-xxl: 1.5rem;
+    
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    --line-height-sm: 1.25;
+    --line-height-md: 1.5;
+    --line-height-lg: 1.75;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+    --transition-slow: 0.5s ease-in-out;
+    
+    /* Z-Index */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+}
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-md);
+    color: var(--gray-800);
+    background-color: var(--gray-100);
+    margin: 0;
+    padding: 0;
+}
+
+/* Utility Classes */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.clearfix::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+
+/* Focus Styles */
+.focus-ring:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --gray-100: #212529;
+        --gray-200: #343a40;
+        --gray-300: #495057;
+        --gray-400: #6c757d;
+        --gray-500: #adb5bd;
+        --gray-600: #ced4da;
+        --gray-700: #dee2e6;
+        --gray-800: #e9ecef;
+        --gray-900: #f8f9fa;
+    }
+    
+    body {
+        background-color: var(--gray-100);
+        color: var(--gray-800);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+    
+    .card {
+        border-width: 2px;
+    }
+    
+    .form-control {
+        border-width: 2px;
+    }
 }

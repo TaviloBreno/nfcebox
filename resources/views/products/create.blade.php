@@ -4,21 +4,21 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Novo Produto') }}</h4>
-                    <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left"></i> {{ __('Voltar') }}
-                    </a>
-                </div>
+            <x-card>
+                <x-slot name="header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ __('Novo Produto') }}</h4>
+                        <x-button href="{{ route('products.index') }}" variant="outline-secondary" icon="fas fa-arrow-left">
+                            {{ __('Voltar') }}
+                        </x-button>
+                    </div>
+                </x-slot>
 
-                <div class="card-body">
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                @if (session('error'))
+                    <x-alert type="danger" dismissible>
+                        {{ session('error') }}
+                    </x-alert>
+                @endif
 
                     <form method="POST" action="{{ route('products.store') }}" novalidate>
                         @csrf
@@ -32,37 +32,30 @@
 
                         <div class="row mb-3">
                             <div class="col-md-8">
-                                <label for="name" class="form-label">{{ __('Nome') }} <span class="text-danger">*</span></label>
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
-                                       name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-form-input 
+                                    name="name" 
+                                    label="{{ __('Nome') }}" 
+                                    value="{{ old('name') }}" 
+                                    required 
+                                    autofocus />
                             </div>
                             <div class="col-md-4">
-                                <label for="sku" class="form-label">{{ __('SKU') }} <span class="text-danger">*</span></label>
-                                <input id="sku" type="text" class="form-control @error('sku') is-invalid @enderror" 
-                                       name="sku" value="{{ old('sku') }}" required>
-                                @error('sku')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-form-input 
+                                    name="sku" 
+                                    label="{{ __('SKU') }}" 
+                                    value="{{ old('sku') }}" 
+                                    required />
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-12">
-                                <label for="description" class="form-label">{{ __('Descrição') }}</label>
-                                <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
-                                          name="description" rows="3">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-form-input 
+                                    name="description" 
+                                    label="{{ __('Descrição') }}" 
+                                    type="textarea" 
+                                    value="{{ old('description') }}" 
+                                    rows="3" />
                             </div>
                         </div>
 
@@ -75,40 +68,36 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="ncm" class="form-label">{{ __('NCM') }} <span class="text-danger">*</span></label>
-                                <input id="ncm" type="text" class="form-control @error('ncm') is-invalid @enderror" 
-                                       name="ncm" value="{{ old('ncm') }}" required maxlength="8" 
-                                       data-mask="00000000" placeholder="12345678">
-                                @error('ncm')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                <div class="form-text">8 dígitos numéricos</div>
+                                <x-form-input 
+                                    name="ncm" 
+                                    label="{{ __('NCM') }}" 
+                                    value="{{ old('ncm') }}" 
+                                    required 
+                                    maxlength="8" 
+                                    data-mask="00000000" 
+                                    placeholder="12345678" 
+                                    help="8 dígitos numéricos" />
                             </div>
                             <div class="col-md-4">
-                                <label for="cfop" class="form-label">{{ __('CFOP') }} <span class="text-danger">*</span></label>
-                                <input id="cfop" type="text" class="form-control @error('cfop') is-invalid @enderror" 
-                                       name="cfop" value="{{ old('cfop') }}" required maxlength="4" 
-                                       data-mask="0000" placeholder="5102">
-                                @error('cfop')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                <div class="form-text">4 dígitos numéricos</div>
+                                <x-form-input 
+                                    name="cfop" 
+                                    label="{{ __('CFOP') }}" 
+                                    value="{{ old('cfop') }}" 
+                                    required 
+                                    maxlength="4" 
+                                    data-mask="0000" 
+                                    placeholder="5102" 
+                                    help="4 dígitos numéricos" />
                             </div>
                             <div class="col-md-4">
-                                <label for="cest" class="form-label">{{ __('CEST') }}</label>
-                                <input id="cest" type="text" class="form-control @error('cest') is-invalid @enderror" 
-                                       name="cest" value="{{ old('cest') }}" maxlength="9" 
-                                       data-mask="00.000.00" placeholder="01.001.00">
-                                @error('cest')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                <div class="form-text">Formato: XX.XXX.XX</div>
+                                <x-form-input 
+                                    name="cest" 
+                                    label="{{ __('CEST') }}" 
+                                    value="{{ old('cest') }}" 
+                                    maxlength="9" 
+                                    data-mask="00.000.00" 
+                                    placeholder="01.001.00" 
+                                    help="Formato: XX.XXX.XX" />
                             </div>
                         </div>
 
@@ -121,68 +110,63 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="unit" class="form-label">{{ __('Unidade') }} <span class="text-danger">*</span></label>
-                                <select id="unit" class="form-select @error('unit') is-invalid @enderror" name="unit" required>
-                                    <option value="">{{ __('Selecione...') }}</option>
-                                    <option value="UN" {{ old('unit') == 'UN' ? 'selected' : '' }}>UN - Unidade</option>
-                                    <option value="PC" {{ old('unit') == 'PC' ? 'selected' : '' }}>PC - Peça</option>
-                                    <option value="KG" {{ old('unit') == 'KG' ? 'selected' : '' }}>KG - Quilograma</option>
-                                    <option value="G" {{ old('unit') == 'G' ? 'selected' : '' }}>G - Grama</option>
-                                    <option value="L" {{ old('unit') == 'L' ? 'selected' : '' }}>L - Litro</option>
-                                    <option value="ML" {{ old('unit') == 'ML' ? 'selected' : '' }}>ML - Mililitro</option>
-                                    <option value="M" {{ old('unit') == 'M' ? 'selected' : '' }}>M - Metro</option>
-                                    <option value="CM" {{ old('unit') == 'CM' ? 'selected' : '' }}>CM - Centímetro</option>
-                                    <option value="M2" {{ old('unit') == 'M2' ? 'selected' : '' }}>M² - Metro Quadrado</option>
-                                    <option value="M3" {{ old('unit') == 'M3' ? 'selected' : '' }}>M³ - Metro Cúbico</option>
-                                </select>
-                                @error('unit')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-form-input 
+                                    name="unit" 
+                                    label="{{ __('Unidade') }}" 
+                                    type="select" 
+                                    value="{{ old('unit') }}" 
+                                    required 
+                                    :options="[
+                                        '' => '{{ __(\'Selecione...\') }}',
+                                        'UN' => 'UN - Unidade',
+                                        'PC' => 'PC - Peça',
+                                        'KG' => 'KG - Quilograma',
+                                        'G' => 'G - Grama',
+                                        'L' => 'L - Litro',
+                                        'ML' => 'ML - Mililitro',
+                                        'M' => 'M - Metro',
+                                        'CM' => 'CM - Centímetro',
+                                        'M2' => 'M² - Metro Quadrado',
+                                        'M3' => 'M³ - Metro Cúbico'
+                                    ]" />
                             </div>
                             <div class="col-md-4">
-                                <label for="price" class="form-label">{{ __('Preço') }} <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input id="price" type="text" class="form-control @error('price') is-invalid @enderror" 
-                                           name="price" value="{{ old('price') }}" required 
-                                           data-mask="#.##0,00" data-mask-reverse="true" placeholder="0,00">
-                                    @error('price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                <x-form-input 
+                                    name="price" 
+                                    label="{{ __('Preço') }}" 
+                                    value="{{ old('price') }}" 
+                                    required 
+                                    prefix="R$" 
+                                    data-mask="#.##0,00" 
+                                    data-mask-reverse="true" 
+                                    placeholder="0,00" />
                             </div>
                             <div class="col-md-4">
-                                <label for="stock" class="form-label">{{ __('Estoque') }} <span class="text-danger">*</span></label>
-                                <input id="stock" type="text" class="form-control @error('stock') is-invalid @enderror" 
-                                       name="stock" value="{{ old('stock') }}" required 
-                                       data-mask="#.##0,000" data-mask-reverse="true" placeholder="0,000">
-                                @error('stock')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-form-input 
+                                    name="stock" 
+                                    label="{{ __('Estoque') }}" 
+                                    value="{{ old('stock') }}" 
+                                    required 
+                                    data-mask="#.##0,000" 
+                                    data-mask-reverse="true" 
+                                    placeholder="0,000" />
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <a href="{{ route('products.index') }}" class="btn btn-outline-secondary me-md-2">
+                                    <x-button href="{{ route('products.index') }}" variant="outline-secondary" class="me-md-2">
                                         {{ __('Cancelar') }}
-                                    </a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> {{ __('Salvar Produto') }}
-                                    </button>
+                                    </x-button>
+                                    <x-button type="submit" variant="primary" icon="fas fa-save">
+                                        {{ __('Salvar Produto') }}
+                                    </x-button>
                                 </div>
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
+            </x-card>
         </div>
     </div>
 </div>

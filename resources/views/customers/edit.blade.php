@@ -7,27 +7,25 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3 mb-0">Editar Cliente</h1>
                 <div>
-                    <a href="{{ route('customers.show', $customer) }}" class="btn btn-info me-2">
+                    <x-button href="{{ route('customers.show', $customer) }}" variant="info" class="me-2">
                         <i class="fas fa-eye"></i> Visualizar
-                    </a>
-                    <a href="{{ route('customers.index') }}" class="btn btn-secondary">
+                    </x-button>
+                    <x-button href="{{ route('customers.index') }}" variant="secondary">
                         <i class="fas fa-arrow-left"></i> Voltar
-                    </a>
+                    </x-button>
                 </div>
             </div>
 
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <x-alert type="danger" dismissible>
                     {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                </x-alert>
             @endif
 
-            <div class="card">
-                <div class="card-header">
+            <x-card>
+                <x-slot name="header">
                     <h5 class="card-title mb-0">Dados do Cliente</h5>
-                </div>
-                <div class="card-body">
+                </x-slot>
                     <form method="POST" action="{{ route('customers.update', $customer) }}" novalidate>
                         @csrf
                         @method('PUT')
@@ -221,16 +219,15 @@
                         </div>
 
                         <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ route('customers.index') }}" class="btn btn-secondary">
+                            <x-button href="{{ route('customers.index') }}" variant="secondary">
                                 Cancelar
-                            </a>
-                            <button type="submit" class="btn btn-primary">
+                            </x-button>
+                            <x-button type="submit" variant="primary">
                                 <i class="fas fa-save"></i> Atualizar Cliente
-                            </button>
+                            </x-button>
                         </div>
                     </form>
-                </div>
-            </div>
+            </x-card>
         </div>
     </div>
 </div>
