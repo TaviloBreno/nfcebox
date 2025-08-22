@@ -218,13 +218,17 @@ class PosController extends Controller
         try {
             DB::beginTransaction();
             
-            // 1. Validar estoque suficiente para todos os produtos
+            // 1. Validar estoque suficiente para todos os produtos com lock
             $stockErrors = [];
+            $lockedProducts = [];
+            
             foreach ($request->items as $item) {
                 $product = Product::lockForUpdate()->find($item['product_id']);
                 if (!$product) {
                     throw new \Exception("Produto não encontrado: ID {$item['product_id']}");
                 }
+                
+                $lockedProducts[$item['product_id']] = $product;
                 
                 if ($product->stock < $item['quantity']) {
                     $stockErrors[] = "Estoque insuficiente para {$product->name}. Disponível: {$product->stock}, Solicitado: {$item['quantity']}";
@@ -253,9 +257,9 @@ class PosController extends Controller
                 'status' => 'draft' // Status inicial antes da autorização SEFAZ
             ]);
             
-            // 5. Adicionar itens da venda e debitar estoque
+            // 5. Adicionar itens da venda e debitar estoque atomicamente
             foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
+                $product = $lockedProducts[$item['product_id']];
                 
                 // Criar item da venda
                 $sale->saleItems()->create([
@@ -265,14 +269,16 @@ class PosController extends Controller
                     'total' => $item['quantity'] * $item['price']
                 ]);
                 
-                // Debitar estoque do produto
+                // Debitar estoque do produto (já com lock)
                 $product->decrement('stock', $item['quantity']);
                 
-                Log::info('Estoque debitado', [
+                Log::info('Estoque debitado na finalização da venda', [
+                    'sale_id' => $sale->id,
                     'product_id' => $product->id,
                     'product_name' => $product->name,
                     'quantity_sold' => $item['quantity'],
-                    'stock_remaining' => $product->fresh()->stock
+                    'stock_before' => $product->stock + $item['quantity'],
+                    'stock_after' => $product->fresh()->stock
                 ]);
             }
             
@@ -289,7 +295,8 @@ class PosController extends Controller
                 'sale_number' => $saleNumber,
                 'total' => $total,
                 'payment_method' => $request->payment_method,
-                'customer_id' => $request->customer_id
+                'customer_id' => $request->customer_id,
+                'items_count' => count($request->items)
             ]);
             
             return response()->json([
@@ -305,6 +312,7 @@ class PosController extends Controller
             
             Log::error('Erro ao finalizar venda', [
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
                 'request_data' => $request->all()
             ]);
             

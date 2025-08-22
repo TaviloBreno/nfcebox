@@ -51,6 +51,20 @@ class DatabaseSeeder extends Seeder
             CompanyConfigSeeder::class,
             CustomerSeeder::class,
             ProductSeeder::class,
+            SaleSeeder::class,
         ]);
+
+        // Seeders condicionais baseados no ambiente
+        if (app()->environment('local', 'testing')) {
+            $this->call([
+                TestScenarioSeeder::class,
+            ]);
+        }
+
+        if (app()->environment('local')) {
+            $this->call([
+                DevelopmentSeeder::class,
+            ]);
+        }
     }
 }

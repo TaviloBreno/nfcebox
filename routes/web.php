@@ -14,6 +14,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DanfeController;
 use App\Http\Controllers\NfceController;
 use App\Http\Controllers\InutilizationController;
+use App\Http\Controllers\ReportController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -105,6 +106,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [ProfileController::class, 'show'])->name('show');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
         Route::put('/update', [ProfileController::class, 'update'])->name('update');
+    });
+    
+    // Reports Routes - Relatórios de Vendas
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/sales-by-period', [ReportController::class, 'salesByPeriod'])->name('sales-by-period');
+        Route::get('/sales-by-payment', [ReportController::class, 'salesByPaymentMethod'])->name('sales-by-payment');
+        Route::get('/sales-by-customer', [ReportController::class, 'salesByCustomer'])->name('sales-by-customer');
+        Route::get('/top-products', [ReportController::class, 'topProducts'])->name('top-products');
+        
+        // Export Routes - Exportação de Relatórios
+        Route::get('/export/sales-by-period/csv', [ReportController::class, 'exportSalesByPeriodCsv'])->name('export.sales-by-period.csv');
+        Route::get('/export/sales-by-period/pdf', [ReportController::class, 'exportSalesByPeriodPdf'])->name('export.sales-by-period.pdf');
+        Route::get('/export/sales-by-payment/csv', [ReportController::class, 'exportSalesByPaymentCsv'])->name('export.sales-by-payment.csv');
+        Route::get('/export/top-products/csv', [ReportController::class, 'exportTopProductsCsv'])->name('export.top-products.csv');
     });
     
     // Configuration Routes - Only for administrators

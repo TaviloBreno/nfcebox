@@ -61,6 +61,7 @@ class SaleController extends Controller
     public function cancel(Sale $sale)
     {
         try {
+            // Verificações iniciais sem lock
             if ($sale->status === 'canceled') {
                 return redirect()->back()->with('warning', 'Esta venda já está cancelada.');
             }
@@ -71,20 +72,55 @@ class SaleController extends Controller
 
             DB::beginTransaction();
 
-            // Restaurar estoque dos produtos
-            foreach ($sale->saleItems as $item) {
-                $item->product->increment('stock', $item->qty);
+            // Lock da venda para evitar race conditions
+            $lockedSale = Sale::lockForUpdate()->find($sale->id);
+            
+            // Verificar novamente após o lock
+            if ($lockedSale->status === 'canceled') {
+                DB::rollBack();
+                return redirect()->back()->with('warning', 'Esta venda já foi cancelada por outro processo.');
+            }
+
+            if ($lockedSale->status === 'authorized') {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Esta venda já foi autorizada e não pode ser cancelada.');
+            }
+
+            // Restaurar estoque dos produtos com lock
+            foreach ($lockedSale->saleItems as $item) {
+                $product = $item->product()->lockForUpdate()->first();
+                $product->increment('stock', $item->qty);
+                
+                \Log::info('Estoque restaurado no cancelamento', [
+                    'sale_id' => $lockedSale->id,
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'quantity_restored' => $item->qty,
+                    'new_stock' => $product->fresh()->stock
+                ]);
             }
 
             // Cancelar a venda
-            $sale->cancel();
+            $lockedSale->update(['status' => 'canceled']);
 
             DB::commit();
+
+            \Log::info('Venda cancelada com sucesso', [
+                'sale_id' => $lockedSale->id,
+                'sale_number' => $lockedSale->number
+            ]);
 
             return redirect()->back()->with('success', 'Venda cancelada com sucesso e estoque restaurado.');
 
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            \Log::error('Erro ao cancelar venda', [
+                'sale_id' => $sale->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return redirect()->back()->with('error', 'Erro ao cancelar venda: ' . $e->getMessage());
         }
     }
