@@ -50,6 +50,15 @@
         
         <hr class="text-white-50">
         
+        <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">RELATÓRIOS</h6>
+        
+        <a class="nav-link text-white {{ request()->routeIs('reports.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('reports.index') }}">
+            <i class="fas fa-chart-bar me-2"></i>
+            <span class="sidebar-text">Relatórios</span>
+        </a>
+        
+        <hr class="text-white-50">
+        
         <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">SISTEMA</h6>
         
         <a class="nav-link text-white {{ request()->routeIs('profile.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('profile.show') }}">

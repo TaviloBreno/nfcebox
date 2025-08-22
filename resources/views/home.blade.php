@@ -20,10 +20,17 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    <i class="bi bi-receipt"></i> Emissão de NFCe
+                    <i class="fas fa-file-invoice text-primary"></i> Emissão de NFCe
                 </h5>
-                <p class="card-text">Emita suas notas fiscais de consumidor eletrônica de forma rápida e segura, seguindo todas as normas da SEFAZ.</p>
-                <a href="#" class="btn btn-primary">Saiba Mais</a>
+                <p class="card-text">Emita suas notas fiscais de consumidor eletrônica de forma rápida e segura, seguindo todas as normas da SEFAZ. Sistema integrado com certificado A1 e validação em tempo real.</p>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('nfce.index') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-1"></i>Acessar NFCe
+                    </a>
+                    <a href="{{ asset('docs/DANFE_DOCUMENTATION.md') }}" class="btn btn-outline-primary" target="_blank">
+                        <i class="fas fa-info-circle me-1"></i>Saiba Mais
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -32,10 +39,17 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    <i class="bi bi-graph-up"></i> Relatórios
+                    <i class="fas fa-chart-bar text-success"></i> Relatórios
                 </h5>
-                <p class="card-text">Acompanhe suas vendas com relatórios detalhados e gráficos intuitivos para melhor gestão do seu negócio.</p>
-                <a href="#" class="btn btn-primary">Saiba Mais</a>
+                <p class="card-text">Acompanhe o desempenho do seu negócio com relatórios detalhados de vendas, produtos e clientes. Exportação em PDF e CSV com gráficos interativos.</p>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('reports.index') }}" class="btn btn-success">
+                        <i class="fas fa-arrow-right me-1"></i>Ver Relatórios
+                    </a>
+                    <a href="{{ asset('docs/SYSTEM_FLOWS.md') }}" class="btn btn-outline-success" target="_blank">
+                        <i class="fas fa-info-circle me-1"></i>Saiba Mais
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -44,10 +58,17 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    <i class="bi bi-shield-check"></i> Segurança
+                    <i class="fas fa-shield-alt text-danger"></i> Segurança
                 </h5>
-                <p class="card-text">Seus dados estão protegidos com criptografia de ponta e backup automático em nuvem.</p>
-                <a href="#" class="btn btn-primary">Saiba Mais</a>
+                <p class="card-text">Seus dados estão protegidos com criptografia de ponta, controle de acesso por perfis, auditoria completa e backup automático em nuvem.</p>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('profile.show') }}" class="btn btn-danger">
+                        <i class="fas fa-arrow-right me-1"></i>Meu Perfil
+                    </a>
+                    <a href="{{ asset('docs/PERMISSIONS_GUIDE.md') }}" class="btn btn-outline-danger" target="_blank">
+                        <i class="fas fa-info-circle me-1"></i>Saiba Mais
+                    </a>
+                </div>
             </div>
         </div>
     </div>

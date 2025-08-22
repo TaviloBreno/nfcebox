@@ -42,22 +42,39 @@
                     @endif
                     
                     <div class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarUserDropdown">
-                            <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarUserDropdown">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                            @else
+                                <i class="fas fa-user-circle me-2"></i>
+                            @endif
+                            <span>{{ Auth::user()->name }}</span>
+                            @if(Auth::user()->is_admin)
+                                <span class="badge bg-primary ms-2">Administrador</span>
+                            @endif
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
                             <li><h6 class="dropdown-header">{{ Auth::user()->email }}</h6></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit"></i> Perfil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">
+                                <i class="fas fa-user me-2"></i>Meu Perfil
+                            </a></li>
+                            @if(Auth::user()->is_admin)
+                                <li><a class="dropdown-item" href="{{ route('configurations.index') }}">
+                                    <i class="fas fa-cog me-2"></i>Configurações
+                                </a></li>
+                            @endif
                             @if(!Auth::user()->hasVerifiedEmail())
-                                <li><a class="dropdown-item" href="{{ route('verification.notice') }}"><i class="fas fa-envelope-open"></i> Verificar E-mail</a></li>
+                                <li><a class="dropdown-item" href="{{ route('verification.notice') }}">
+                                    <i class="fas fa-envelope-open me-2"></i>Verificar E-mail
+                                </a></li>
                             @endif
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="dropdown-item text-danger">
-                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                        <i class="fas fa-sign-out-alt me-2"></i>Sair
                                     </button>
                                 </form>
                             </li>

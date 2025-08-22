@@ -9,9 +9,17 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title mb-0">
-                        <i class="fas fa-receipt me-2"></i>
+                        <i class="fas fa-file-invoice me-2"></i>
                         Gerenciamento de NFC-e
                     </h3>
+                    <div class="d-flex gap-2">
+                        <a href="{{ asset('docs/DANFE_DOCUMENTATION.md') }}" class="btn btn-outline-info btn-sm" target="_blank">
+                            <i class="fas fa-info-circle me-1"></i>Documentação DANFE
+                        </a>
+                        <a href="{{ asset('docs/SYSTEM_FLOWS.md#emissão-de-nfce') }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                            <i class="fas fa-book me-1"></i>Guia de Uso
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Filtros -->

@@ -5,9 +5,17 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0">Configurações do Sistema</h1>
                 <div>
-                    <a href="{{ route('configurations.edit') }}" class="btn btn-primary me-2">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-cogs me-2"></i>Configurações do Sistema
+                    </h1>
+                    <p class="text-muted mb-0">Gerencie as configurações de segurança e operacionais do sistema</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ asset('docs/PERMISSIONS_GUIDE.md') }}" class="btn btn-outline-warning btn-sm" target="_blank">
+                        <i class="fas fa-shield-alt me-1"></i>Guia de Segurança
+                    </a>
+                    <a href="{{ route('configurations.edit') }}" class="btn btn-primary">
                         <i class="fas fa-edit me-2"></i>Editar Configurações
                     </a>
                     <a href="{{ route('configurations.users') }}" class="btn btn-secondary">

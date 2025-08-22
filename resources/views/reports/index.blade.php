@@ -26,10 +26,15 @@
                                     <p class="card-text text-muted">
                                         Relatório detalhado de vendas filtrado por período e status.
                                     </p>
-                                    <a href="{{ route('reports.sales-by-period') }}" class="btn btn-primary">
-                                        <i class="fas fa-eye me-1"></i>
-                                        Visualizar
-                                    </a>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('reports.sales-by-period') }}" class="btn btn-primary">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Visualizar
+                                        </a>
+                                        <a href="{{ asset('docs/SYSTEM_FLOWS.md#relatórios') }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -45,10 +50,15 @@
                                     <p class="card-text text-muted">
                                         Análise de vendas agrupadas por forma de pagamento.
                                     </p>
-                                    <a href="{{ route('reports.sales-by-payment') }}" class="btn btn-success">
-                                        <i class="fas fa-eye me-1"></i>
-                                        Visualizar
-                                    </a>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('reports.sales-by-payment') }}" class="btn btn-success">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Visualizar
+                                        </a>
+                                        <a href="{{ asset('docs/SYSTEM_FLOWS.md#relatórios') }}" class="btn btn-outline-success btn-sm" target="_blank">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,10 +74,15 @@
                                     <p class="card-text text-muted">
                                         Ranking dos melhores clientes por volume de compras.
                                     </p>
-                                    <a href="{{ route('reports.sales-by-customer') }}" class="btn btn-info">
-                                        <i class="fas fa-eye me-1"></i>
-                                        Visualizar
-                                    </a>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('reports.sales-by-customer') }}" class="btn btn-info">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Visualizar
+                                        </a>
+                                        <a href="{{ asset('docs/SYSTEM_FLOWS.md#relatórios') }}" class="btn btn-outline-info btn-sm" target="_blank">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -83,10 +98,15 @@
                                     <p class="card-text text-muted">
                                         Ranking dos produtos com maior volume de vendas.
                                     </p>
-                                    <a href="{{ route('reports.top-products') }}" class="btn btn-warning">
-                                        <i class="fas fa-eye me-1"></i>
-                                        Visualizar
-                                    </a>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('reports.top-products') }}" class="btn btn-warning">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Visualizar
+                                        </a>
+                                        <a href="{{ asset('docs/SYSTEM_FLOWS.md#relatórios') }}" class="btn btn-outline-warning btn-sm" target="_blank">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
