@@ -23,11 +23,15 @@ class Sale extends Model
         'authorized_at',
         'error_message',
         'xml_path',
+        'cancellation_reason',
+        'canceled_at',
+        'cancellation_xml_path',
     ];
 
     protected $casts = [
         'total' => 'decimal:2',
         'authorized_at' => 'datetime',
+        'canceled_at' => 'datetime',
     ];
     
     /**

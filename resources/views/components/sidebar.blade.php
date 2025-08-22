@@ -24,6 +24,11 @@
             <span class="sidebar-text">Vendas</span>
         </a>
         
+        <a class="nav-link text-white {{ request()->routeIs('nfce.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('nfce.index') }}">
+            <i class="fas fa-file-invoice me-2"></i>
+            <span class="sidebar-text">NFC-e</span>
+        </a>
+        
         <hr class="text-white-50">
         
         <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">CADASTROS</h6>

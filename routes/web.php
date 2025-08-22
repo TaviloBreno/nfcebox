@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DanfeController;
+use App\Http\Controllers\NfceController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -63,6 +64,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{sale}/download', [DanfeController::class, 'download'])->name('download');
         Route::get('/{sale}/print', [DanfeController::class, 'print'])->name('print');
         Route::get('/{sale}/info', [DanfeController::class, 'info'])->name('info');
+    });
+    
+    // NFC-e Routes - Gerenciamento de NFC-e
+    Route::prefix('nfce')->name('nfce.')->group(function () {
+        Route::get('/', [NfceController::class, 'index'])->name('index');
+        Route::get('/{sale}/xml', [NfceController::class, 'viewXml'])->name('xml');
+        Route::get('/{sale}/download-pdf', [NfceController::class, 'downloadPdf'])->name('download-pdf');
+        Route::get('/{sale}/reprint', [NfceController::class, 'reprint'])->name('reprint');
+        Route::post('/{sale}/cancel', [NfceController::class, 'cancel'])->name('cancel');
+        Route::post('/{sale}/print-network', [NfceController::class, 'printToNetwork'])->name('print-network');
     });
     
     // POS Routes - Sistema de PDV
