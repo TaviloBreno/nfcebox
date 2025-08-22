@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Sales\SaleNumberService;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class Sale extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'number',
         'customer_id',
@@ -18,10 +20,13 @@ class Sale extends Model
         'status',
         'nfce_key',
         'protocol',
+        'authorized_at',
+        'error_message',
     ];
 
     protected $casts = [
         'total' => 'decimal:2',
+        'authorized_at' => 'datetime',
     ];
     
     /**

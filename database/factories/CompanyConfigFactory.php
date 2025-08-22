@@ -17,7 +17,7 @@ class CompanyConfigFactory extends Factory
     public function definition(): array
     {
         return [
-            'cnpj' => '11222333000181',
+            'cnpj' => $this->faker->numerify('##############'),
             'ie' => '123.456.789.012',
             'im' => '12345678',
             'corporate_name' => 'NFCEBOX TECNOLOGIA LTDA',

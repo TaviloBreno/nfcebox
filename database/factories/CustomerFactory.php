@@ -20,11 +20,10 @@ class CustomerFactory extends Factory
         
         return [
             'name' => $isCompany ? $this->faker->company() : $this->faker->name(),
-            'cpf_cnpj' => $isCompany ? $this->generateCnpj() : $this->generateCpf(),
-            'ie' => $isCompany ? $this->faker->numerify('###.###.###.###') : null,
+            'document' => $isCompany ? $this->generateCnpj() : $this->generateCpf(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->phoneNumber,
-            'address_json' => json_encode([
+            'address' => json_encode([
                 'street' => $this->faker->streetName(),
                 'number' => $this->faker->buildingNumber(),
                 'complement' => $this->faker->optional()->secondaryAddress(),
