@@ -29,6 +29,11 @@
             <span class="sidebar-text">NFC-e</span>
         </a>
         
+        <a class="nav-link text-white {{ request()->routeIs('inutilizations.*') ? 'active bg-primary rounded' : '' }}" href="{{ route('inutilizations.index') }}">
+            <i class="fas fa-ban me-2"></i>
+            <span class="sidebar-text">Inutilização</span>
+        </a>
+        
         <hr class="text-white-50">
         
         <h6 class="text-white-50 px-3 mb-2 mt-3 sidebar-section-title">CADASTROS</h6>

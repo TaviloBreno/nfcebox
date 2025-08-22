@@ -13,6 +13,7 @@ use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DanfeController;
 use App\Http\Controllers\NfceController;
+use App\Http\Controllers\InutilizationController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -74,6 +75,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{sale}/reprint', [NfceController::class, 'reprint'])->name('reprint');
         Route::post('/{sale}/cancel', [NfceController::class, 'cancel'])->name('cancel');
         Route::post('/{sale}/print-network', [NfceController::class, 'printToNetwork'])->name('print-network');
+    });
+    
+    // Inutilization Routes - Inutilização de NFC-e
+    Route::prefix('inutilizations')->name('inutilizations.')->group(function () {
+        Route::get('/', [InutilizationController::class, 'index'])->name('index');
+        Route::get('/create', [InutilizationController::class, 'create'])->name('create');
+        Route::post('/', [InutilizationController::class, 'store'])->name('store');
+        Route::get('/{inutilization}', [InutilizationController::class, 'show'])->name('show');
+        Route::post('/{inutilization}/reprocess', [InutilizationController::class, 'reprocess'])->name('reprocess');
+        Route::get('/{inutilization}/download', [InutilizationController::class, 'download'])->name('download');
+        Route::get('/api/search', [InutilizationController::class, 'apiSearch'])->name('api.search');
     });
     
     // POS Routes - Sistema de PDV

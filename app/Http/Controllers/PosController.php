@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Services\Sales\SaleNumberService;
+use App\Jobs\TransmitNfceJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -243,13 +244,13 @@ class PosController extends Controller
             $saleNumberService = new SaleNumberService();
             $saleNumber = $saleNumberService->generateNextNumber();
             
-            // 4. Criar a venda com status inicial authorized_pending
+            // 4. Criar a venda com status inicial draft
             $sale = Sale::create([
                 'number' => $saleNumber,
                 'customer_id' => $request->customer_id,
                 'total' => $total,
                 'payment_method' => $request->payment_method,
-                'status' => 'authorized_pending' // Status inicial antes da autorização SEFAZ
+                'status' => 'draft' // Status inicial antes da autorização SEFAZ
             ]);
             
             // 5. Adicionar itens da venda e debitar estoque
@@ -277,6 +278,9 @@ class PosController extends Controller
             
             DB::commit();
             
+            // Despachar job para transmitir NFCe
+            TransmitNfceJob::dispatch($sale);
+            
             // Limpar carrinho da sessão
             session()->forget('pos_cart');
             
@@ -290,7 +294,7 @@ class PosController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Venda finalizada com sucesso!',
+                'message' => 'Venda finalizada com sucesso! NFCe será transmitida automaticamente.',
                 'sale_number' => $saleNumber,
                 'sale_id' => $sale->id,
                 'total' => $total

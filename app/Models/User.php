@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'bio',
         'is_admin',
+        'role',
     ];
 
     /**
@@ -49,5 +50,98 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];
+    }
+
+    /**
+     * Verifica se o usuário é administrador
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Verifica se o usuário é operador de caixa
+     */
+    public function isOperador(): bool
+    {
+        return $this->role === 'operador';
+    }
+
+    /**
+     * Verifica se o usuário é fiscal
+     */
+    public function isFiscal(): bool
+    {
+        return $this->role === 'fiscal';
+    }
+
+    /**
+     * Verifica se o usuário tem permissão para acessar recursos administrativos
+     */
+    public function canAccessAdmin(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Verifica se o usuário pode acessar o PDV e vendas
+     */
+    public function canAccessPos(): bool
+    {
+        return $this->isAdmin() || $this->isOperador();
+    }
+
+    /**
+     * Verifica se o usuário pode acessar recursos fiscais
+     */
+    public function canAccessFiscal(): bool
+    {
+        return $this->isAdmin() || $this->isFiscal();
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar clientes
+     */
+    public function canManageCustomers(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar produtos
+     */
+    public function canManageProducts(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar configurações
+     */
+    public function canManageConfig(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar vendas
+     */
+    public function canManageSales(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Obtém o nome formatado do role
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return match($this->role) {
+            'admin' => 'Administrador',
+            'operador' => 'Operador de Caixa',
+            'fiscal' => 'Fiscal',
+            default => 'Usuário'
+        };
     }
 }

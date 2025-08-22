@@ -672,6 +672,205 @@ class SefazClient
     }
 
     /**
+     * Inutiliza uma faixa de números de NFC-e
+     */
+    public function inutilizeRange(string $series, int $numeroInicial, int $numeroFinal, string $justificativa): array
+    {
+        try {
+            // Gera o XML do evento de inutilização
+            $eventXml = $this->buildInutilizationXml($series, $numeroInicial, $numeroFinal, $justificativa);
+            
+            // Envia para a SEFAZ
+            $response = $this->sendInutilizationEvent($eventXml);
+            
+            if ($response['success']) {
+                // Salva o XML de retorno
+                $xmlPath = $this->saveInutilizationXml($series, $numeroInicial, $numeroFinal, $response['xml']);
+                
+                return [
+                    'success' => true,
+                    'protocol' => $response['protocol'],
+                    'xml_path' => $xmlPath,
+                    'message' => 'Inutilização autorizada com sucesso'
+                ];
+            }
+            
+            return $response;
+            
+        } catch (Exception $e) {
+            Log::error('Erro ao inutilizar faixa de números', [
+                'series' => $series,
+                'numero_inicial' => $numeroInicial,
+                'numero_final' => $numeroFinal,
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Erro interno: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Constrói o XML do evento de inutilização
+     */
+    private function buildInutilizationXml(string $series, int $numeroInicial, int $numeroFinal, string $justificativa): string
+    {
+        $address = $this->companyConfig->address_json;
+        if (is_string($address)) {
+            $address = json_decode($address, true);
+        }
+        $state = $address['state'] ?? 'SP';
+        $cUF = $this->getUfCode($state);
+        
+        $cnpj = preg_replace('/[^0-9]/', '', $this->companyConfig->cnpj);
+        $id = 'ID' . $cUF . $cnpj . '65' . str_pad($series, 3, '0', STR_PAD_LEFT) . 
+              str_pad($numeroInicial, 9, '0', STR_PAD_LEFT) . str_pad($numeroFinal, 9, '0', STR_PAD_LEFT);
+        
+        $dhEvento = date('c'); // ISO 8601
+        $nSeqEvento = 1;
+        
+        return '<?xml version="1.0" encoding="UTF-8"?>' .
+               '<envEvento xmlns="http://www.portalfiscal.inf.br/nfe" versao="1.00">' .
+               '<idLote>1</idLote>' .
+               '<evento versao="1.00">' .
+               '<infEvento Id="' . $id . '">' .
+               '<cOrgao>' . $cUF . '</cOrgao>' .
+               '<tpAmb>' . ($this->environment === 'producao' ? '1' : '2') . '</tpAmb>' .
+               '<CNPJ>' . $cnpj . '</CNPJ>' .
+               '<dhEvento>' . $dhEvento . '</dhEvento>' .
+               '<tpEvento>110111</tpEvento>' . // Código do evento de inutilização
+               '<nSeqEvento>' . $nSeqEvento . '</nSeqEvento>' .
+               '<verEvento>1.00</verEvento>' .
+               '<detEvento versao="1.00">' .
+               '<descEvento>Inutilizacao</descEvento>' .
+               '<nProt></nProt>' . // Vazio para inutilização
+               '<xJust>' . htmlspecialchars($justificativa, ENT_XML1) . '</xJust>' .
+               '</detEvento>' .
+               '</infEvento>' .
+               '</evento>' .
+               '</envEvento>';
+    }
+
+    /**
+     * Envia o evento de inutilização para SEFAZ
+     */
+    private function sendInutilizationEvent(string $eventXml): array
+    {
+        try {
+            $address = $this->companyConfig->address_json;
+            if (is_string($address)) {
+                $address = json_decode($address, true);
+            }
+            $state = $address['state'] ?? 'SP';
+            
+            $url = $this->webserviceUrls[$state]['RecepcaoEvento4'] ?? 
+                   $this->webserviceUrls['SP']['RecepcaoEvento4'];
+            
+            $soapEnvelope = $this->buildInutilizationSoapEnvelope($eventXml);
+            $response = $this->sendSoapRequest('RecepcaoEvento4', $soapEnvelope);
+            
+            return $this->processInutilizationResponse($response);
+            
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Erro na comunicação: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Constrói o envelope SOAP para inutilização
+     */
+    private function buildInutilizationSoapEnvelope(string $eventXml): string
+    {
+        return '<?xml version="1.0" encoding="utf-8"?>' .
+               '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" ' .
+               'xmlns:nfe="http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento4">' .
+               '<soap:Header />' .
+               '<soap:Body>' .
+               '<nfe:nfeRecepcaoEvento>' .
+               '<nfe:nfeDadosMsg>' .
+               $eventXml .
+               '</nfe:nfeDadosMsg>' .
+               '</nfe:nfeRecepcaoEvento>' .
+               '</soap:Body>' .
+               '</soap:Envelope>';
+    }
+
+    /**
+     * Processa a resposta do evento de inutilização
+     */
+    private function processInutilizationResponse(string $response): array
+    {
+        $dom = new \DOMDocument();
+        $dom->loadXML($response);
+        
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('nfe', 'http://www.portalfiscal.inf.br/nfe');
+        
+        // Verifica status do evento
+        $cStatNodes = $xpath->query('//nfe:cStat');
+        if ($cStatNodes->length === 0) {
+            return [
+                'success' => false,
+                'message' => 'Resposta inválida da SEFAZ - status não encontrado'
+            ];
+        }
+        
+        $cStat = $cStatNodes->item(0)->nodeValue;
+        $xMotivoNodes = $xpath->query('//nfe:xMotivo');
+        $message = $xMotivoNodes->length > 0 ? $xMotivoNodes->item(0)->nodeValue : 'Sem mensagem';
+        
+        // Status 135 = Evento registrado e vinculado à NF-e (inutilização autorizada)
+        if ($cStat === '135') {
+            $nProtNodes = $xpath->query('//nfe:nProt');
+            $protocol = $nProtNodes->length > 0 ? $nProtNodes->item(0)->nodeValue : null;
+            
+            return [
+                'success' => true,
+                'protocol' => $protocol,
+                'xml' => $response,
+                'message' => $message
+            ];
+        }
+        
+        // Outros status são erros
+        return [
+            'success' => false,
+            'code' => $cStat,
+            'message' => $message,
+            'xml' => $response
+        ];
+    }
+
+    /**
+     * Salva o XML de inutilização no storage
+     */
+    private function saveInutilizationXml(string $series, int $numeroInicial, int $numeroFinal, string $xmlContent): ?string
+    {
+        try {
+            $filename = "inutilizacao_serie{$series}_{$numeroInicial}-{$numeroFinal}_" . date('YmdHis') . '.xml';
+            $xmlPath = "nfce/inutilizacoes/{$filename}";
+            
+            Storage::disk('local')->put($xmlPath, $xmlContent);
+            
+            return $xmlPath;
+        } catch (Exception $e) {
+            Log::error('Erro ao salvar XML de inutilização', [
+                'series' => $series,
+                'numero_inicial' => $numeroInicial,
+                'numero_final' => $numeroFinal,
+                'error' => $e->getMessage()
+            ]);
+            
+            return null;
+        }
+    }
+
+    /**
      * Salva o XML autorizado no storage
      */
     private function saveAuthorizedXml(Sale $sale, ?string $accessKey): ?string
