@@ -6,6 +6,7 @@ use App\Models\CompanyConfig;
 use App\Models\Sale;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use SoapClient;
 use SoapFault;
 
@@ -454,17 +455,22 @@ class SefazClient
      */
     private function updateSaleAsAuthorized(Sale $sale, ?string $accessKey, ?string $protocol): void
     {
+        // Salva o XML autorizado
+        $xmlPath = $this->saveAuthorizedXml($sale, $accessKey);
+        
         $sale->update([
             'status' => 'authorized',
             'nfce_key' => $accessKey,
             'protocol' => $protocol,
-            'authorized_at' => now()
+            'authorized_at' => now(),
+            'xml_path' => $xmlPath
         ]);
         
         Log::info('Venda autorizada com sucesso', [
             'sale_id' => $sale->id,
             'access_key' => $accessKey,
-            'protocol' => $protocol
+            'protocol' => $protocol,
+            'xml_path' => $xmlPath
         ]);
     }
     
@@ -517,5 +523,35 @@ class SefazClient
     public function getEnvironment(): string
     {
         return $this->environment;
+    }
+    
+    /**
+     * Salva o XML autorizado no storage
+     */
+    private function saveAuthorizedXml(Sale $sale, ?string $accessKey): ?string
+    {
+        if (!$accessKey) {
+            return null;
+        }
+        
+        try {
+            $xmlPath = "nfce/authorized/{$sale->id}_{$accessKey}.xml";
+            
+            // Aqui você pode recuperar o XML completo autorizado da resposta
+            // Por enquanto, vamos criar um placeholder
+            $xmlContent = "<?xml version='1.0' encoding='UTF-8'?>\n<!-- XML autorizado para venda {$sale->id} -->";
+            
+            Storage::disk('local')->put($xmlPath, $xmlContent);
+            
+            return $xmlPath;
+        } catch (Exception $e) {
+            Log::error('Erro ao salvar XML autorizado', [
+                'sale_id' => $sale->id,
+                'access_key' => $accessKey,
+                'error' => $e->getMessage()
+            ]);
+            
+            return null;
+        }
     }
 }

@@ -22,6 +22,7 @@ class Sale extends Model
         'protocol',
         'authorized_at',
         'error_message',
+        'xml_path',
     ];
 
     protected $casts = [

@@ -11,6 +11,7 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\DanfeController;
 
 // Home route - protected
 Route::get('/', function () {
@@ -55,6 +56,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{sale}', [SaleController::class, 'show'])->name('show');
         Route::put('/{sale}/cancel', [SaleController::class, 'cancel'])->name('cancel');
         Route::get('/api/statistics', [SaleController::class, 'statistics'])->name('statistics');
+    });
+    
+    // DANFE Routes - Geração de DANFE/Cupom Fiscal
+    Route::prefix('danfe')->name('danfe.')->group(function () {
+        Route::get('/{sale}/download', [DanfeController::class, 'download'])->name('download');
+        Route::get('/{sale}/print', [DanfeController::class, 'print'])->name('print');
+        Route::get('/{sale}/info', [DanfeController::class, 'info'])->name('info');
     });
     
     // POS Routes - Sistema de PDV
