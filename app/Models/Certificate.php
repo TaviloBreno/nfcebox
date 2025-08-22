@@ -11,7 +11,19 @@ class Certificate extends Model
         'company_config_id',
         'alias',
         'path',
+        'file_path',
         'password',
+        'subject',
+        'issuer',
+        'expires_at',
+        'is_valid',
+        'is_default',
+    ];
+
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'is_valid' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
     /**

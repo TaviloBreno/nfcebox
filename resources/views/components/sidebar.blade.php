@@ -1,9 +1,10 @@
-<div class="sidebar bg-dark text-white vh-100 position-fixed" style="width: 250px; z-index: 1000;">
-    <div class="p-3 sidebar-header">
+<div class="sidebar bg-dark text-white vh-100 position-fixed d-flex flex-column" style="width: 250px; z-index: 1000;">
+    <div class="p-3 sidebar-header flex-shrink-0">
         <h5 class="mb-0 sidebar-text">{{ config('app.name', 'Laravel') }}</h5>
     </div>
     
-    <nav class="nav flex-column">
+    <div class="sidebar-nav-container flex-grow-1" style="overflow-y: auto; padding-bottom: 80px;">
+        <nav class="nav flex-column">
         <a class="nav-link text-white {{ request()->routeIs('home') ? 'active bg-primary rounded' : '' }}" href="{{ route('home') }}">
             <i class="fas fa-home me-2"></i>
             <span class="sidebar-text">Dashboard</span>
@@ -56,10 +57,16 @@
                 <i class="fas fa-users-cog me-2"></i>
                 <span class="sidebar-text">Usuários</span>
             </a>
+            
+            <a class="nav-link text-white {{ request()->routeIs('configurations.certificates*') ? 'active bg-primary rounded' : '' }}" href="{{ route('configurations.certificates') }}">
+                <i class="fas fa-certificate me-2"></i>
+                <span class="sidebar-text">Certificados A1</span>
+            </a>
         @endif
-    </nav>
+        </nav>
+    </div>
     
-    <div class="position-absolute bottom-0 w-100 p-3">
+    <div class="position-absolute bottom-0 w-100 p-3 bg-dark flex-shrink-0">
         <!-- Seção Administrador -->
         <div class="mb-3">
             <hr class="text-white-50">
@@ -114,5 +121,30 @@
 .nav-link.active {
     background-color: #0d6efd;
     border-radius: 5px;
+}
+
+/* Estilização da barra de rolagem */
+.sidebar-nav-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-nav-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar-nav-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar-nav-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Para Firefox */
+.sidebar-nav-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
 }
 </style>

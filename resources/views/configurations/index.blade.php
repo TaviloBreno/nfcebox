@@ -33,10 +33,19 @@
                             @if($config)
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
-                                        <strong>Nome:</strong>
+                                        <strong>Razão Social:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        {{ $config->company_name ?? 'Não configurado' }}
+                                        {{ $config->corporate_name ?? 'Não configurado' }}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>Nome Fantasia:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {{ $config->trade_name ?? 'Não configurado' }}
                                     </div>
                                 </div>
 
@@ -45,34 +54,25 @@
                                         <strong>CNPJ:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        {{ $config->cnpj ?? 'Não configurado' }}
+                                        {{ $config->cnpj ? preg_replace('/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/', '$1.$2.$3/$4-$5', $config->cnpj) : 'Não configurado' }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
-                                        <strong>Endereço:</strong>
+                                        <strong>IE:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        {{ $config->address ?? 'Não configurado' }}
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <div class="col-sm-4">
-                                        <strong>Telefone:</strong>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        {{ $config->phone ?? 'Não configurado' }}
+                                        {{ $config->ie ?? 'Não configurado' }}
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <strong>E-mail:</strong>
+                                        <strong>IM:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        {{ $config->email ?? 'Não configurado' }}
+                                        {{ $config->im ?? 'Não configurado' }}
                                     </div>
                                 </div>
                             @else
@@ -92,51 +92,127 @@
                 <div class="col-lg-6 mb-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h5 class="mb-0"><i class="fas fa-certificate me-2"></i>Certificado Digital</h5>
+                            <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Configurações NFCe</h5>
                         </div>
                         <div class="card-body">
-                            @if($config && $config->certificate_path)
+                            @if($config)
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
-                                        <strong>Caminho:</strong>
+                                        <strong>Ambiente:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        <code>{{ $config->certificate_path }}</code>
+                                        @if($config->environment === 'producao')
+                                            <span class="badge bg-success">Produção</span>
+                                        @else
+                                            <span class="badge bg-warning">Homologação</span>
+                                        @endif
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
-                                        <strong>Status:</strong>
+                                        <strong>Série NFCe:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        @if(file_exists($config->certificate_path))
-                                            <span class="badge bg-success">Arquivo encontrado</span>
-                                        @else
-                                            <span class="badge bg-danger">Arquivo não encontrado</span>
-                                        @endif
+                                        {{ $config->nfce_series ?? 'Não configurado' }}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>Próximo Número:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {{ $config->nfce_number ?? 'Não configurado' }}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>CSC ID:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {{ $config->csc_id ?? 'Não configurado' }}
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <strong>Senha:</strong>
+                                        <strong>CSC Token:</strong>
                                     </div>
                                     <div class="col-sm-8">
-                                        @if($config->certificate_password)
-                                            <span class="badge bg-success">Configurada</span>
+                                        @if($config->csc_token)
+                                            <span class="badge bg-success">Configurado</span>
                                         @else
-                                            <span class="badge bg-warning">Não configurada</span>
+                                            <span class="badge bg-warning">Não configurado</span>
                                         @endif
                                     </div>
                                 </div>
                             @else
                                 <div class="text-center py-4">
-                                    <i class="fas fa-certificate fa-3x text-muted mb-3"></i>
-                                    <h5>Certificado não configurado</h5>
-                                    <p class="text-muted">Configure o certificado digital para emissão de NFCe.</p>
+                                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                                    <h5>Configurações NFCe não encontradas</h5>
+                                    <p class="text-muted">Configure os parâmetros da NFCe para começar.</p>
                                     <a href="{{ route('configurations.edit') }}" class="btn btn-primary">
-                                        <i class="fas fa-plus me-2"></i>Configurar Certificado
+                                        <i class="fas fa-plus me-2"></i>Configurar Agora
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-certificate me-2"></i>Certificados A1</h5>
+                            <a href="{{ route('configurations.certificates') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus me-1"></i>Gerenciar Certificados
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            @if($config && $config->certificates && $config->certificates->count() > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Alias</th>
+                                                <th>Arquivo</th>
+                                                <th>Status</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($config->certificates as $certificate)
+                                                <tr>
+                                                    <td>{{ $certificate->alias }}</td>
+                                                    <td><code>{{ basename($certificate->path) }}</code></td>
+                                                    <td>
+                                                        @if(file_exists(storage_path('app/secure/certs/' . basename($certificate->path))))
+                                                            <span class="badge bg-success">Ativo</span>
+                                                        @else
+                                                            <span class="badge bg-danger">Arquivo não encontrado</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('configurations.certificates.show', $certificate) }}" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <div class="text-center py-4">
+                                    <i class="fas fa-certificate fa-3x text-muted mb-3"></i>
+                                    <h5>Nenhum certificado configurado</h5>
+                                    <p class="text-muted">Faça upload de certificados A1 (.pfx/.p12) para emissão de NFCe.</p>
+                                    <a href="{{ route('configurations.certificates') }}" class="btn btn-primary">
+                                        <i class="fas fa-upload me-2"></i>Fazer Upload de Certificado
                                     </a>
                                 </div>
                             @endif

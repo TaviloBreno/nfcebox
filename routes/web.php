@@ -84,7 +84,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // User management routes
         Route::get('/users', [ConfigurationController::class, 'users'])->name('users');
-        Route::put('/users/{user}', [ConfigurationController::class, 'updateUser'])->name('users.update');
-        Route::put('/users/{user}/permissions', [ConfigurationController::class, 'updateUserPermissions'])->name('users.permissions');
+        Route::put('/users/{user}', [ConfigurationController::class, 'updateUserPermissions'])->name('users.update');
+        
+        // Certificate management routes
+        Route::get('/certificates', [ConfigurationController::class, 'certificates'])->name('certificates');
+        Route::post('/certificates/upload', [ConfigurationController::class, 'uploadCertificate'])->name('certificates.upload');
+        Route::patch('/certificates/{certificate}/set-default', [ConfigurationController::class, 'setDefaultCertificate'])->name('certificates.set-default');
+        Route::get('/certificates/{certificate}/details', [ConfigurationController::class, 'certificateDetails'])->name('certificates.details');
+        Route::delete('/certificates/{certificate}', [ConfigurationController::class, 'deleteCertificate'])->name('certificates.delete');
     });
 });
