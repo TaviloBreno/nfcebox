@@ -1,0 +1,710 @@
+/**
+ * UI Components Responsive Styles
+ * 
+ * This file contains responsive styles for UI components like modals, alerts,
+ * badges, dropdowns, and other Bootstrap components to ensure proper display
+ * on tablets and smartphones
+ */
+
+/* Modal Responsive Improvements */
+.modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+}
+
+.modal-content {
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.modal-body {
+    padding: 1.25rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 0.75rem 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Alert Responsive Improvements */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.alert-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.alert .btn-close {
+    padding: 0.75rem;
+    margin: -0.75rem -0.75rem -0.75rem auto;
+}
+
+.alert-content {
+    margin: 0;
+}
+
+.alert .d-flex {
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+/* Badge Responsive Improvements */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.badge-lg {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+}
+
+.badge-sm {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Dropdown Responsive Improvements */
+.dropdown-menu {
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+    min-width: 200px;
+    max-width: calc(100vw - 2rem);
+    font-size: 0.9rem;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border-radius: 0;
+    transition: all 0.15s ease-in-out;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: inherit;
+}
+
+.dropdown-item.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-header {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Breadcrumb Responsive Improvements */
+.breadcrumb {
+    padding: 0.75rem 0;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+    line-height: 1.4;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 0.5rem;
+}
+
+.breadcrumb-item.active {
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 500;
+}
+
+/* Pagination Responsive Improvements */
+.pagination {
+    justify-content: center;
+    margin-bottom: 0;
+    gap: 0.25rem;
+}
+
+.page-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--bs-primary);
+    text-decoration: none;
+    transition: all 0.15s ease-in-out;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-link:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+.page-item.active .page-link {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Progress Bar Responsive Improvements */
+.progress {
+    height: 1rem;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 0.5rem;
+    transition: width 0.6s ease;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-align: center;
+}
+
+.progress-sm {
+    height: 0.5rem;
+}
+
+.progress-lg {
+    height: 1.5rem;
+}
+
+.progress-lg .progress-bar {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+}
+
+/* List Group Responsive Improvements */
+.list-group {
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.list-group-item {
+    padding: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease-in-out;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.list-group-item.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}
+
+.list-group-item-action:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Accordion Responsive Improvements */
+.accordion {
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.accordion-item {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-header {
+    margin-bottom: 0;
+}
+
+.accordion-button {
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    border: none;
+    background-color: transparent;
+    color: inherit;
+    text-align: left;
+    transition: all 0.15s ease-in-out;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+    color: var(--bs-primary);
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    border-color: transparent;
+}
+
+.accordion-body {
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Toast Responsive Improvements */
+.toast {
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    max-width: calc(100vw - 2rem);
+    font-size: 0.9rem;
+}
+
+.toast-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem 0.75rem 0 0;
+    font-weight: 500;
+}
+
+.toast-body {
+    padding: 1rem;
+    line-height: 1.5;
+}
+
+/* Offcanvas Responsive Improvements */
+.offcanvas {
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.offcanvas-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.offcanvas-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.offcanvas-body {
+    padding: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Mobile Specific Styles */
+@media (max-width: 575.98px) {
+    /* Modal adjustments for mobile */
+    .modal-dialog {
+        margin: 0.25rem;
+        max-width: calc(100% - 0.5rem);
+    }
+    
+    .modal-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+        max-height: 60vh;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .modal-footer .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    /* Alert adjustments for mobile */
+    .alert {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+    }
+    
+    .alert-heading {
+        font-size: 0.95rem;
+    }
+    
+    .alert .d-flex {
+        gap: 0.5rem;
+    }
+    
+    /* Badge adjustments for mobile */
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Dropdown adjustments for mobile */
+    .dropdown-menu {
+        font-size: 0.875rem;
+        min-width: 180px;
+        border-radius: 0.5rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Breadcrumb adjustments for mobile */
+    .breadcrumb {
+        padding: 0.5rem 0;
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+    }
+    
+    .breadcrumb-item {
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Pagination adjustments for mobile */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 0.125rem;
+    }
+    
+    .page-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        min-height: 40px;
+        min-width: 40px;
+    }
+    
+    /* Progress adjustments for mobile */
+    .progress {
+        height: 0.875rem;
+    }
+    
+    .progress-bar {
+        font-size: 0.7rem;
+        line-height: 0.875rem;
+    }
+    
+    /* List group adjustments for mobile */
+    .list-group-item {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Accordion adjustments for mobile */
+    .accordion-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .accordion-body {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Toast adjustments for mobile */
+    .toast {
+        max-width: calc(100vw - 1rem);
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+    }
+    
+    .toast-header {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .toast-body {
+        padding: 0.75rem;
+    }
+    
+    /* Offcanvas adjustments for mobile */
+    .offcanvas {
+        max-width: 85vw;
+    }
+    
+    .offcanvas-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .offcanvas-title {
+        font-size: 1rem;
+    }
+    
+    .offcanvas-body {
+        padding: 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    .modal-body {
+        max-height: 65vh;
+    }
+    
+    .dropdown-menu {
+        min-width: 200px;
+    }
+    
+    .offcanvas {
+        max-width: 75vw;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .modal-dialog {
+        margin: 1rem auto;
+        max-width: 90%;
+    }
+    
+    .modal-body {
+        max-height: 70vh;
+    }
+    
+    .modal-lg {
+        max-width: 95%;
+    }
+    
+    .dropdown-menu {
+        min-width: 220px;
+    }
+    
+    .offcanvas {
+        max-width: 60vw;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .modal-dialog {
+        margin: 1.75rem auto;
+    }
+    
+    .modal-body {
+        max-height: 75vh;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .dropdown-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .page-link {
+        min-height: 48px;
+        min-width: 48px;
+    }
+    
+    .list-group-item-action {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .accordion-button {
+        min-height: 48px;
+    }
+    
+    .btn-close {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .modal-body {
+        max-height: 50vh;
+    }
+    
+    .offcanvas-body {
+        padding: 0.75rem;
+    }
+}
+
+/* Print optimizations */
+@media print {
+    .modal,
+    .dropdown-menu,
+    .toast,
+    .offcanvas {
+        display: none !important;
+    }
+    
+    .alert {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+    
+    .badge {
+        border: 1px solid #000 !important;
+        background-color: transparent !important;
+        color: #000 !important;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .modal,
+    .alert,
+    .dropdown-menu,
+    .toast,
+    .offcanvas,
+    .accordion-button,
+    .page-link,
+    .list-group-item {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .modal-content,
+    .alert,
+    .dropdown-menu,
+    .toast {
+        border: 2px solid currentColor !important;
+    }
+    
+    .badge {
+        border: 1px solid currentColor !important;
+    }
+}
+
+/* Focus improvements for keyboard navigation */
+.modal:focus,
+.dropdown-item:focus,
+.page-link:focus,
+.list-group-item-action:focus,
+.accordion-button:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Utility classes for responsive components */
+.component-mobile-full {
+    width: 100% !important;
+}
+
+.component-mobile-center {
+    text-align: center !important;
+}
+
+.component-mobile-stack {
+    flex-direction: column !important;
+}
+
+.component-mobile-wrap {
+    flex-wrap: wrap !important;
+}
+
+@media (max-width: 575.98px) {
+    .component-mobile-full {
+        width: 100% !important;
+    }
+    
+    .component-mobile-center {
+        text-align: center !important;
+    }
+    
+    .component-mobile-stack {
+        flex-direction: column !important;
+    }
+    
+    .component-mobile-wrap {
+        flex-wrap: wrap !important;
+    }
+}

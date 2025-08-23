@@ -111,7 +111,7 @@
                                     $value = \Carbon\Carbon::parse($value)->format('d/m/Y H:i');
                                 }
                             @endphp
-                            <td @if($cellClass) class="{{ $cellClass }}" @endif>
+                            <td @if($cellClass) class="{{ $cellClass }}" @endif data-label="{{ is_array($header) ? $header['label'] : $header }}">
                                 {!! $value !!}
                             </td>
                         @endforeach
@@ -122,7 +122,7 @@
                     @endif
                     
                     @if($actions)
-                        <td class="text-center">
+                        <td class="text-center" data-label="Ações">
                             @if(is_callable($actions))
                                 {!! $actions($row, $index) !!}
                             @else

@@ -9,9 +9,12 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* Component Styles */
+@import 'components/data-table.css';
 @import 'components/common.css';
 @import 'components/sidebar.css';
-@import 'components/data-table.css';
+@import 'components/forms.css';
+@import 'components/ui-components.css';
+@import 'components/responsive.css';
 
 /* Page Styles */
 @import 'pages/reports.css';

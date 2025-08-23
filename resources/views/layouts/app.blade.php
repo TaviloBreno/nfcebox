@@ -2,8 +2,13 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=yes, minimum-scale=1, maximum-scale=5">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#007bff">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -25,19 +30,22 @@
         @include('components.sidebar')
         
         <!-- Top Navbar for authenticated users -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom main-content" style="margin-left: 250px;" id="mainNavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom main-content" id="mainNavbar">
             <div class="container-fluid">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-link" type="button" id="sidebarToggle">
+                <div class="d-flex align-items-center flex-grow-1">
+                    <button class="btn btn-link d-lg-none" type="button" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h4 class="mb-0 ms-3">@yield('page-title', 'Dashboard')</h4>
+                    <button class="btn btn-link d-none d-lg-block" type="button" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h4 class="mb-0 ms-2 ms-lg-3 text-truncate">@yield('page-title', 'Dashboard')</h4>
                 </div>
                 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center flex-shrink-0">
                     @if(!Auth::user()->hasVerifiedEmail())
-                        <span class="badge bg-warning text-dark me-3">
-                            <i class="fas fa-exclamation-triangle"></i> E-mail não verificado
+                        <span class="badge bg-warning text-dark me-2 me-lg-3 d-none d-sm-inline">
+                            <i class="fas fa-exclamation-triangle"></i> <span class="d-none d-md-inline">E-mail não verificado</span>
                         </span>
                     @endif
                     
@@ -48,9 +56,9 @@
                             @else
                                 <i class="fas fa-user-circle me-2"></i>
                             @endif
-                            <span>{{ Auth::user()->name }}</span>
+                            <span class="d-none d-sm-inline text-truncate" style="max-width: 150px;">{{ Auth::user()->name }}</span>
                             @if(Auth::user()->is_admin)
-                                <span class="badge bg-primary ms-2">Administrador</span>
+                                <span class="badge bg-primary ms-2 d-none d-md-inline">Administrador</span>
                             @endif
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
@@ -85,8 +93,8 @@
         </nav>
         
         <!-- Main Content with sidebar offset -->
-        <main class="py-4 main-content flex-grow-1" style="margin-left: 250px;">
-            <div class="container-fluid">
+        <main class="py-3 py-lg-4 main-content flex-grow-1">
+            <div class="container-fluid px-3 px-lg-4">
                 @yield('content')
             </div>
         </main>
