@@ -14,6 +14,12 @@ class TableManager {
         this.initTables();
     }
     
+    refreshData() {
+        // Refresh table data
+        console.log('Table data refreshed');
+        // This method can be extended to reload table data
+    }
+    
     bindEvents() {
         // Handle table actions
         document.addEventListener('click', (e) => {

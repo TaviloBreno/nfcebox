@@ -16,6 +16,22 @@ class FormManager {
         this.initSelectComponents();
     }
     
+    initValidation() {
+        // Initialize form validation
+        // This method can be extended with additional validation logic
+        console.log('Form validation initialized');
+    }
+    
+    hasUnsavedChanges() {
+        // Check if there are unsaved changes in forms
+        return false; // This can be extended to track form changes
+    }
+    
+    savePendingData() {
+        // Save any pending form data
+        console.log('Saving pending data');
+    }
+    
     bindEvents() {
         this.forms.forEach(form => {
             form.addEventListener('submit', (e) => {
