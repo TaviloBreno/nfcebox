@@ -393,44 +393,9 @@
         }
     </style>
     
-    <!-- Working dropdown implementation -->
+    <!-- Sidebar toggle functionality -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait a bit for Bootstrap to fully load
-            setTimeout(function() {
-                // Get all dropdown toggles
-                const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-                
-                dropdownToggles.forEach(function(toggle) {
-                    toggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        // Close all other dropdowns first
-                        document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
-                            if (menu !== toggle.nextElementSibling) {
-                                menu.classList.remove('show');
-                            }
-                        });
-                        
-                        // Toggle current dropdown
-                        const menu = toggle.nextElementSibling;
-                        if (menu && menu.classList.contains('dropdown-menu')) {
-                            menu.classList.toggle('show');
-                        }
-                    });
-                });
-                
-                // Close dropdowns when clicking outside
-                 document.addEventListener('click', function(e) {
-                     if (!e.target.closest('.dropdown')) {
-                         document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
-                             menu.classList.remove('show');
-                         });
-                     }
-                 });
-                 
-             }, 200);
              
              // Sidebar toggle functionality
              const sidebarToggle = document.getElementById('sidebarToggle');
