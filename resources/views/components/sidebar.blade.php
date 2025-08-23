@@ -3,7 +3,7 @@
         <h5 class="mb-0 sidebar-text">{{ config('app.name', 'Laravel') }}</h5>
     </div>
     
-    <div class="sidebar-nav-container flex-grow-1" style="overflow-y: auto; padding-bottom: 80px;">
+    <div class="sidebar-nav-container flex-grow-1" style="overflow-y: auto; padding-bottom: 120px;">
         <nav class="nav flex-column">
         <a class="nav-link text-white {{ request()->routeIs('home') ? 'active bg-primary rounded' : '' }}" href="{{ route('home') }}">
             <i class="fas fa-home me-2"></i>
