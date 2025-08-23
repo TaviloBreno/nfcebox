@@ -58,21 +58,21 @@
                 @if($customers->count() > 0)
                     <x-data-table 
                         :headers="[
-                            'Nome',
-                            'CPF/CNPJ',
-                            'Email',
-                            'Telefone',
-                            'Cidade',
-                            'Ações'
+                            'name' => 'Nome',
+                            'document' => 'CPF/CNPJ',
+                            'email' => 'Email',
+                            'phone' => 'Telefone',
+                            'address' => 'Cidade',
+                            'actions' => 'Ações'
                         ]"
-                        :data="collect($customers->items())->map(function($customer) {
+:data="$customers->map(function($customer) {
                             return [
-                                '<strong>' . e($customer->name) . '</strong>',
-                                '<span class="font-monospace">' . e($customer->formatted_document) . '</span>',
-                                e($customer->email ?: '-'),
-                                $customer->phone ? '<span class="font-monospace">' . e($customer->formatted_phone) . '</span>' : '<span class="text-muted">-</span>',
-                                $customer->address ? e(($customer->address['city'] ?? '') . ', ' . ($customer->address['state'] ?? '')) : '-',
-                                view('customers.partials.actions', ['customer' => $customer])->render()
+                                'name' => '<strong>' . e($customer->name) . '</strong>',
+                                'document' => '<span class="font-monospace">' . e($customer->formatted_document) . '</span>',
+                                'email' => e($customer->email ?: '-'),
+                                'phone' => $customer->phone ? '<span class="font-monospace">' . e($customer->formatted_phone) . '</span>' : '<span class="text-muted">-</span>',
+                                'address' => $customer->address ? e(($customer->address['city'] ?? '') . ', ' . ($customer->address['state'] ?? '')) : '-',
+                                'actions' => view('customers.partials.actions', ['customer' => $customer])->render()
                             ];
                         })"
                         striped
