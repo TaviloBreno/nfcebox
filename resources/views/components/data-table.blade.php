@@ -1,7 +1,7 @@
 @props([
     'headers' => [],
     'data' => [],
-    'actions' => null,
+    'actions' => null,      // coluna extra de ações (opcional, NÃO usada aqui)
     'responsive' => true,
     'striped' => true,
     'hover' => true,
@@ -9,8 +9,8 @@
     'small' => false,
     'dark' => false,
     'headerDark' => true,
-    'sortable' => false,
-    'searchable' => false,
+    'sortable' => false,    // habilita ordenação por coluna
+    'searchable' => false,  // habilita busca client-side
     'pagination' => null,
     'emptyMessage' => 'Nenhum registro encontrado.',
     'tableId' => null,
@@ -20,20 +20,18 @@
 
 @php
     $tableClasses = ['table'];
-    
     if ($striped) $tableClasses[] = 'table-striped';
     if ($hover) $tableClasses[] = 'table-hover';
     if ($bordered) $tableClasses[] = 'table-bordered';
     if ($small) $tableClasses[] = 'table-sm';
     if ($dark) $tableClasses[] = 'table-dark';
     if ($tableClass) $tableClasses[] = $tableClass;
-    
     $tableClassString = implode(' ', $tableClasses);
-    
+
     $headerClasses = [];
     if ($headerDark && !$dark) $headerClasses[] = 'table-dark';
     $headerClassString = implode(' ', $headerClasses);
-    
+
     $uniqueId = $tableId ?: 'table_' . uniqid();
 @endphp
 
@@ -69,19 +67,20 @@
                 <tr>
                     @foreach($headers as $key => $header)
                         @php
+                            // Evite sobrescrever a prop $sortable global
                             $headerConfig = is_array($header) ? $header : ['label' => $header];
                             $label = $headerConfig['label'] ?? $header;
-                            $sortable = $headerConfig['sortable'] ?? false;
+                            $isSortableCol = $headerConfig['sortable'] ?? false;
                             $width = $headerConfig['width'] ?? null;
                             $class = $headerConfig['class'] ?? '';
                         @endphp
                         <th 
                             @if($width) style="width: {{ $width }}" @endif
                             @if($class) class="{{ $class }}" @endif
-                            @if($sortable) data-sortable="true" data-sort-key="{{ $key }}" @endif
+                            @if($isSortableCol) data-sortable="true" data-sort-key="{{ $key }}" @endif
                         >
                             {{ $label }}
-                            @if($sortable)
+                            @if($isSortableCol)
                                 <i class="fas fa-sort ms-1 text-muted" data-sort-icon></i>
                             @endif
                         </th>
@@ -102,9 +101,8 @@
                                 $value = is_array($row) ? ($row[$key] ?? '') : ($row->{$key} ?? '');
                                 $headerConfig = is_array($header) ? $header : [];
                                 $format = $headerConfig['format'] ?? null;
-                                $class = $headerConfig['cellClass'] ?? '';
+                                $cellClass = $headerConfig['cellClass'] ?? '';
                                 
-                                // Apply formatting
                                 if ($format === 'currency' && is_numeric($value)) {
                                     $value = 'R$ ' . number_format($value, 2, ',', '.');
                                 } elseif ($format === 'date' && $value) {
@@ -113,12 +111,12 @@
                                     $value = \Carbon\Carbon::parse($value)->format('d/m/Y H:i');
                                 }
                             @endphp
-                            <td @if($class) class="{{ $class }}" @endif>
+                            <td @if($cellClass) class="{{ $cellClass }}" @endif>
                                 {!! $value !!}
                             </td>
                         @endforeach
                     @else
-                        <td colspan="{{ count($headers) + ($actions ? 1 : 0) }}">
+                        <td colspan="{{ (is_array($headers) ? count($headers) : 0) + ($actions ? 1 : 0) }}">
                             {{ $row }}
                         </td>
                     @endif
@@ -136,8 +134,7 @@
             @empty
                 <tr>
                     @php
-                        $headerCount = isset($headers) ? substr_count($headers, '<th') : 0;
-                        $totalCols = $headerCount + ($actions ? 1 : 0);
+                        $totalCols = (is_array($headers) ? count($headers) : 0) + ($actions ? 1 : 0);
                     @endphp
                     <td colspan="{{ $totalCols }}" class="text-center text-muted py-4">
                         <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
@@ -167,7 +164,6 @@
             const table = document.getElementById(tableId);
             
             @if($searchable)
-                // Search functionality
                 const searchInput = document.querySelector(`[data-table-search="${tableId}"]`);
                 const searchClear = document.querySelector(`[data-table-search-clear="${tableId}"]`);
                 
@@ -175,7 +171,6 @@
                     searchInput.addEventListener('input', function() {
                         const searchTerm = this.value.toLowerCase();
                         const rows = table.querySelectorAll('tbody tr');
-                        
                         rows.forEach(row => {
                             const text = row.textContent.toLowerCase();
                             row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -185,14 +180,15 @@
                 
                 if (searchClear) {
                     searchClear.addEventListener('click', function() {
-                        searchInput.value = '';
-                        searchInput.dispatchEvent(new Event('input'));
+                        if (searchInput) {
+                            searchInput.value = '';
+                            searchInput.dispatchEvent(new Event('input'));
+                        }
                     });
                 }
             @endif
             
             @if($sortable)
-                // Sort functionality
                 const sortableHeaders = table.querySelectorAll('th[data-sortable="true"]');
                 
                 sortableHeaders.forEach(header => {
@@ -203,17 +199,15 @@
                         const tbody = table.querySelector('tbody');
                         const rows = Array.from(tbody.querySelectorAll('tr'));
                         
-                        // Reset other icons
+                        // Reset icons
                         sortableHeaders.forEach(h => {
                             if (h !== this) {
                                 const otherIcon = h.querySelector('[data-sort-icon]');
-                                if (otherIcon) {
-                                    otherIcon.className = 'fas fa-sort ms-1 text-muted';
-                                }
+                                if (otherIcon) otherIcon.className = 'fas fa-sort ms-1 text-muted';
                             }
                         });
                         
-                        // Determine sort direction
+                        // Direction
                         let ascending = true;
                         if (icon.classList.contains('fa-sort-up')) {
                             ascending = false;
@@ -222,16 +216,19 @@
                             icon.className = 'fas fa-sort-up ms-1';
                         }
                         
+                        // Determine index of the column
+                        const headerKeys = Object.keys(@json($headers));
+                        const colIndex = headerKeys.indexOf(sortKey);
+
                         // Sort rows
                         rows.sort((a, b) => {
-                            const aValue = a.children[Object.keys({{ json_encode($headers) }}).indexOf(sortKey)]?.textContent || '';
-                            const bValue = b.children[Object.keys({{ json_encode($headers) }}).indexOf(sortKey)]?.textContent || '';
-                            
+                            const aValue = a.children[colIndex]?.textContent?.trim() || '';
+                            const bValue = b.children[colIndex]?.textContent?.trim() || '';
                             const comparison = aValue.localeCompare(bValue, 'pt-BR', { numeric: true });
                             return ascending ? comparison : -comparison;
                         });
                         
-                        // Reorder DOM
+                        // Reattach rows
                         rows.forEach(row => tbody.appendChild(row));
                     });
                 });

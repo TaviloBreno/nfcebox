@@ -46,42 +46,54 @@
                     </div>
                 </form>
 
+                @php
+                    // PRÉ-MONTA AS LINHAS — sem "use" aqui!
+                    $rows = $products->map(function ($product) {
+                        $nameColumn = '<strong>' . e($product->name) . '</strong>';
+                        if ($product->description) {
+                            $nameColumn .= '<br><small class="text-muted">' 
+                                . e(\Illuminate\Support\Str::limit($product->description, 50)) 
+                                . '</small>';
+                        }
+
+                        $stockBadge = '<span class="badge ' . ($product->stock > 0 ? 'bg-success' : 'bg-danger') . '">'
+                                    . e(number_format((float)$product->stock, 3, ',', '.'))
+                                    . '</span>';
+
+                        // (Opcional) mover para um partial Blade
+                        $actions = '<div class="btn-group" role="group">'
+                                 .    '<a href="' . e(route('products.show', $product)) . '" class="btn btn-sm btn-outline-info" title="' . e(__('Visualizar')) . '"><i class="fas fa-eye"></i></a>'
+                                 .    '<a href="' . e(route('products.edit', $product)) . '" class="btn btn-sm btn-outline-primary" title="' . e(__('Editar')) . '"><i class="fas fa-edit"></i></a>'
+                                 .    '<form action="' . e(route('products.destroy', $product)) . '" method="POST" style="display:inline-block;" onsubmit="return confirm(\'' . e(__('Tem certeza que deseja excluir este produto?')) . '\')">'
+                                 .          csrf_field() . method_field('DELETE')
+                                 .          '<button type="submit" class="btn btn-sm btn-outline-danger" title="' . e(__('Excluir')) . '"><i class="fas fa-trash"></i></button>'
+                                 .    '</form>'
+                                 . '</div>';
+
+                        return [
+                            // headers numéricos => array indexado na mesma ordem
+                            $nameColumn,
+                            '<code>' . e($product->sku) . '</code>',
+                            e($product->ncm),
+                            e($product->cfop),
+                            e($product->unit),
+                            'R$ ' . number_format((float)$product->price, 2, ',', '.'),
+                            $stockBadge,
+                            $actions,
+                        ];
+                    })->toArray();
+                @endphp
+
                 @if($products->count() > 0)
                     <x-data-table 
                         :headers="[__('Nome'), __('SKU'), __('NCM'), __('CFOP'), __('Unidade'), __('Preço'), __('Estoque'), __('Ações')]"
-                        :data="$products->map(function($product) {
-                            $nameColumn = '<strong>' . $product->name . '</strong>';
-                            if ($product->description) {
-                                $nameColumn .= '<br><small class="text-muted">' . Str::limit($product->description, 50) . '</small>';
-                            }
-                            
-                            $stockBadge = '<span class="badge ' . ($product->stock > 0 ? 'bg-success' : 'bg-danger') . '">' . 
-                                         number_format($product->stock, 3, ',', '.') . '</span>';
-                            
-                            $actions = '<div class="btn-group" role="group">' .
-                                      '<a href="' . route('products.show', $product) . '" class="btn btn-sm btn-outline-info" title="' . __('Visualizar') . '"><i class="fas fa-eye"></i></a>' .
-                                      '<a href="' . route('products.edit', $product) . '" class="btn btn-sm btn-outline-primary" title="' . __('Editar') . '"><i class="fas fa-edit"></i></a>' .
-                                      '<form action="' . route('products.destroy', $product) . '" method="POST" style="display: inline-block;" onsubmit="return confirm(\'' . __('Tem certeza que deseja excluir este produto?') . '\')">' .
-                                      csrf_field() . method_field('DELETE') .
-                                      '<button type="submit" class="btn btn-sm btn-outline-danger" title="' . __('Excluir') . '"><i class="fas fa-trash"></i></button>' .
-                                      '</form></div>';
-                            
-                            return [
-                                $nameColumn,
-                                '<code>' . $product->sku . '</code>',
-                                $product->ncm,
-                                $product->cfop,
-                                $product->unit,
-                                'R$ ' . number_format($product->price, 2, ',', '.'),
-                                $stockBadge,
-                                $actions
-                            ];
-                        })->toArray()"
+                        :data="$rows"
                         striped
                         hover
                         responsive
                         searchable
-                        sortable />
+                        sortable
+                    />
                 @else
                     <div class="text-center py-4">
                         <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
