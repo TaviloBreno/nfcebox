@@ -25,7 +25,13 @@ class ResetPasswordRequest extends FormRequest
         return [
             'token' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'confirmed', Password::defaults()],
+            'password' => [
+                'required', 
+                'string', 
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/'
+            ],
         ];
     }
 
@@ -42,7 +48,9 @@ class ResetPasswordRequest extends FormRequest
             'email.email' => 'O email deve ter um formato válido.',
             'email.max' => 'O email não pode ter mais de 255 caracteres.',
             'password.required' => 'O campo senha é obrigatório.',
+            'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
             'password.confirmed' => 'A confirmação da senha não confere.',
+            'password.regex' => 'A senha deve conter pelo menos: 1 letra minúscula, 1 maiúscula, 1 número e 1 caractere especial (@$!%*?&).',
         ];
     }
 }

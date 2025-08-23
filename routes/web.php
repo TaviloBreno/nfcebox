@@ -27,10 +27,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
     
-    // Registration Routes
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
-    
     // Password Reset Routes
     Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -131,6 +127,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // User management routes
         Route::get('/users', [ConfigurationController::class, 'users'])->name('users');
+        Route::get('/users/create', [ConfigurationController::class, 'createUser'])->name('users.create');
+        Route::post('/users', [ConfigurationController::class, 'storeUser'])->name('users.store');
         Route::put('/users/{user}', [ConfigurationController::class, 'updateUserPermissions'])->name('users.update');
         
         // Certificate management routes

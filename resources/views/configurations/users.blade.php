@@ -6,9 +6,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3 mb-0">Gerenciar Usuários</h1>
-                <a href="{{ route('configurations.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Voltar às Configurações
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('configurations.users.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Novo Usuário
+                    </a>
+                    <a href="{{ route('configurations.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar às Configurações
+                    </a>
+                </div>
             </div>
 
             @if(session('success'))

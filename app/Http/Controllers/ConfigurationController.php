@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use App\Models\CompanyConfig;
 use App\Models\Certificate;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 
 class ConfigurationController extends Controller
 {
@@ -76,6 +79,40 @@ class ConfigurationController extends Controller
     }
 
     /**
+     * Exibir formulário de criação de usuário
+     */
+    public function createUser()
+    {
+        return view('configurations.create-user');
+    }
+
+    /**
+     * Criar novo usuário
+     */
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/',
+            'is_admin' => 'boolean'
+        ], [
+            'password.regex' => 'A senha deve conter pelo menos: 1 letra minúscula, 1 maiúscula, 1 número e 1 caractere especial.'
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'is_admin' => $request->boolean('is_admin'),
+        ]);
+
+        event(new Registered($user));
+
+        return redirect()->route('configurations.users')->with('success', 'Usuário criado com sucesso!');
+    }
+
+    /**
      * Atualizar permissões de usuário
      */
     public function updateUserPermissions(Request $request, $userId)
@@ -84,7 +121,7 @@ class ConfigurationController extends Controller
             'is_admin' => 'boolean'
         ]);
 
-        $user = \App\Models\User::findOrFail($userId);
+        $user = User::findOrFail($userId);
         $user->is_admin = $request->has('is_admin');
         $user->save();
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
@@ -58,11 +60,18 @@ class PasswordResetController extends Controller
                 ]);
 
                 $user->save();
+
+                // Invalidar todas as sessões existentes do usuário
+                DB::table('sessions')->where('user_id', $user->id)->delete();
+                
+                // Invalidar tokens de "remember me"
+                $user->setRememberToken(null);
+                $user->save();
             }
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
+                    ? redirect()->route('login')->with('status', 'Senha redefinida com sucesso! Faça login com sua nova senha.')
                     : back()->withErrors(['email' => [__($status)]]);
     }
 
