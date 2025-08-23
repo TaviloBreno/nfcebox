@@ -135,7 +135,11 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="{{ count($headers) + ($actions ? 1 : 0) }}" class="text-center text-muted py-4">
+                    @php
+                        $headerCount = isset($headers) ? substr_count($headers, '<th') : 0;
+                        $totalCols = $headerCount + ($actions ? 1 : 0);
+                    @endphp
+                    <td colspan="{{ $totalCols }}" class="text-center text-muted py-4">
                         <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
                         {{ $emptyMessage }}
                     </td>

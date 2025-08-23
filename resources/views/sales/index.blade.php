@@ -59,18 +59,21 @@
                             label="Data Final" 
                             value="{{ request('date_to') }}" />
                     </div>
-                    <div class="col-md-3 d-flex align-items-end">
+                    <div class="col-md-1 d-flex align-items-end">
                         <x-button 
                             type="submit" 
                             variant="primary" 
                             icon="fas fa-search" 
-                            class="me-2">
+                            class="w-100">
                             Filtrar
                         </x-button>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
                         <x-button 
                             href="{{ route('sales.index') }}" 
                             variant="outline-secondary" 
-                            icon="fas fa-times">
+                            icon="fas fa-times" 
+                            class="w-100">
                             Limpar
                         </x-button>
                     </div>
