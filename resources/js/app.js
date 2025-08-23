@@ -8,7 +8,6 @@
 // Import Bootstrap
 import './bootstrap';
 import 'bootstrap';
-import * as bootstrap from 'bootstrap';
 
 // Import custom modules
 import { SidebarManager } from './modules/sidebar.js';
