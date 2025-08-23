@@ -6,9 +6,9 @@
 class SidebarManager {
     constructor() {
         this.sidebar = document.querySelector('.sidebar');
-        this.sidebarToggle = document.querySelector('.sidebar-toggle');
+        this.sidebarToggle = document.getElementById('sidebarToggle');
         this.sidebarOverlay = document.querySelector('.sidebar-overlay');
-        this.mainContent = document.querySelector('.main-content');
+        this.mainContent = document.querySelectorAll('.main-content');
         
         this.init();
     }
@@ -20,10 +20,13 @@ class SidebarManager {
     }
     
     bindEvents() {
-        // Toggle sidebar on mobile
+        // Create overlay if it doesn't exist
+        this.createOverlay();
+        
+        // Toggle sidebar
         if (this.sidebarToggle) {
-            this.sidebarToggle.addEventListener('click', () => {
-                this.toggleSidebar();
+            this.sidebarToggle.addEventListener('click', (e) => {
+                this.handleSidebarToggle(e);
             });
         }
         
@@ -46,6 +49,12 @@ class SidebarManager {
                 this.handleNavClick(e, link);
             });
         });
+        
+        // Restore sidebar state from localStorage
+        this.restoreSidebarState();
+        
+        // Setup overlay observer
+        this.setupOverlayObserver();
     }
     
     toggleSidebar() {
@@ -107,6 +116,76 @@ class SidebarManager {
     handleResponsive() {
         if (window.innerWidth > 768) {
             this.closeSidebar();
+            // Restore collapsed state for desktop
+            this.restoreSidebarState();
+        } else {
+            // Remove desktop classes on mobile
+            if (this.sidebar) {
+                this.sidebar.classList.remove('collapsed');
+                this.mainContent.forEach(element => {
+                    element.classList.remove('sidebar-collapsed');
+                });
+            }
+        }
+    }
+    
+    createOverlay() {
+        if (!this.sidebarOverlay) {
+            this.sidebarOverlay = document.createElement('div');
+            this.sidebarOverlay.className = 'sidebar-overlay';
+            document.body.appendChild(this.sidebarOverlay);
+        }
+    }
+    
+    handleSidebarToggle(e) {
+        e.preventDefault();
+        
+        if (window.innerWidth <= 768) {
+            // Mobile behavior
+            this.toggleSidebar();
+        } else {
+            // Desktop behavior
+            if (this.sidebar) {
+                this.sidebar.classList.toggle('collapsed');
+                
+                // Toggle main content margin
+                this.mainContent.forEach(element => {
+                    element.classList.toggle('sidebar-collapsed');
+                });
+                
+                // Store state in localStorage
+                const isCollapsed = this.sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            }
+        }
+    }
+    
+    restoreSidebarState() {
+        if (window.innerWidth > 768 && this.sidebar) {
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                this.sidebar.classList.add('collapsed');
+                this.mainContent.forEach(element => {
+                    element.classList.add('sidebar-collapsed');
+                });
+            }
+        }
+    }
+    
+    setupOverlayObserver() {
+        if (this.sidebar && this.sidebarOverlay) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        if (this.sidebar.classList.contains('show')) {
+                            this.sidebarOverlay.classList.add('show');
+                        } else {
+                            this.sidebarOverlay.classList.remove('show');
+                        }
+                    }
+                });
+            });
+            observer.observe(this.sidebar, { attributes: true });
         }
     }
     

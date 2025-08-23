@@ -149,8 +149,7 @@
         </div>
     </footer>
     
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS will be loaded via Vite -->
     
     <!-- CSS for dropdowns and responsive design -->
     <style>
@@ -393,103 +392,7 @@
         }
     </style>
     
-    <!-- Sidebar toggle functionality -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-             
-             // Sidebar toggle functionality
-             const sidebarToggle = document.getElementById('sidebarToggle');
-             const sidebar = document.querySelector('.sidebar');
-             const mainContent = document.querySelectorAll('.main-content');
-             
-             if (sidebarToggle && sidebar) {
-                 // Create overlay for mobile
-                 let overlay = document.querySelector('.sidebar-overlay');
-                 if (!overlay) {
-                     overlay = document.createElement('div');
-                     overlay.className = 'sidebar-overlay';
-                     document.body.appendChild(overlay);
-                 }
-                 
-                 // Function to handle sidebar toggle based on screen size
-                 function handleSidebarToggle(e) {
-                     e.preventDefault();
-                     
-                     if (window.innerWidth <= 768) {
-                         // Mobile behavior
-                         sidebar.classList.toggle('show');
-                     } else {
-                         // Desktop behavior
-                         sidebar.classList.toggle('collapsed');
-                         
-                         // Toggle main content margin
-                         mainContent.forEach(function(element) {
-                             element.classList.toggle('sidebar-collapsed');
-                         });
-                         
-                         // Store state in localStorage
-                         const isCollapsed = sidebar.classList.contains('collapsed');
-                         localStorage.setItem('sidebarCollapsed', isCollapsed);
-                     }
-                 }
-                 
-                 // Add click event listener
-                 sidebarToggle.addEventListener('click', handleSidebarToggle);
-                 
-                 // Show/hide overlay with sidebar
-                 const observer = new MutationObserver(function(mutations) {
-                     mutations.forEach(function(mutation) {
-                         if (mutation.attributeName === 'class') {
-                             if (sidebar.classList.contains('show')) {
-                                 overlay.classList.add('show');
-                             } else {
-                                 overlay.classList.remove('show');
-                             }
-                         }
-                     });
-                 });
-                 observer.observe(sidebar, { attributes: true });
-                 
-                 // Close sidebar when clicking overlay
-                 overlay.addEventListener('click', function() {
-                     sidebar.classList.remove('show');
-                 });
-                 
-                 // Restore sidebar state from localStorage (only for desktop)
-                 if (window.innerWidth > 768) {
-                     const savedState = localStorage.getItem('sidebarCollapsed');
-                     if (savedState === 'true') {
-                         sidebar.classList.add('collapsed');
-                         mainContent.forEach(function(element) {
-                             element.classList.add('sidebar-collapsed');
-                         });
-                     }
-                 }
-                 
-                 // Handle window resize
-                 window.addEventListener('resize', function() {
-                     if (window.innerWidth > 768) {
-                         sidebar.classList.remove('show');
-                         overlay.classList.remove('show');
-                         
-                         // Restore collapsed state for desktop
-                         const savedState = localStorage.getItem('sidebarCollapsed');
-                         if (savedState === 'true') {
-                             sidebar.classList.add('collapsed');
-                             mainContent.forEach(function(element) {
-                                 element.classList.add('sidebar-collapsed');
-                             });
-                         }
-                     } else {
-                         // Remove desktop classes on mobile
-                         sidebar.classList.remove('collapsed');
-                         mainContent.forEach(function(element) {
-                             element.classList.remove('sidebar-collapsed');
-                         });
-                     }
-                 });
-             }
-         });
-    </script>
+    <!-- JavaScript functionality handled by Vite modules -->
+    @vite(['resources/js/app.js'])
 </body>
 </html>
