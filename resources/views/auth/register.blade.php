@@ -33,6 +33,19 @@
                             <label for="password" class="form-label">{{ __('Senha') }}</label>
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
                                    name="password" required autocomplete="new-password">
+                            
+                            <div class="form-text">
+                                <small class="text-muted">
+                                    A senha deve conter pelo menos:
+                                    <ul class="mb-0 mt-1">
+                                        <li id="length" class="text-danger">8 caracteres</li>
+                                        <li id="lowercase" class="text-danger">1 letra minúscula</li>
+                                        <li id="uppercase" class="text-danger">1 letra maiúscula</li>
+                                        <li id="number" class="text-danger">1 número</li>
+                                        <li id="special" class="text-danger">1 caractere especial (@$!%*?&)</li>
+                                    </ul>
+                                </small>
+                            </div>
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -57,5 +70,55 @@
                             <p class="mb-0">Já tem uma conta? <a href="{{ route('login') }}">Faça login</a></p>
                         </div>
                     </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const lengthCheck = document.getElementById('length');
+    const lowercaseCheck = document.getElementById('lowercase');
+    const uppercaseCheck = document.getElementById('uppercase');
+    const numberCheck = document.getElementById('number');
+    const specialCheck = document.getElementById('special');
+
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        
+        // Verificar comprimento
+        if (password.length >= 8) {
+            lengthCheck.className = 'text-success';
+        } else {
+            lengthCheck.className = 'text-danger';
+        }
+        
+        // Verificar letra minúscula
+        if (/[a-z]/.test(password)) {
+            lowercaseCheck.className = 'text-success';
+        } else {
+            lowercaseCheck.className = 'text-danger';
+        }
+        
+        // Verificar letra maiúscula
+        if (/[A-Z]/.test(password)) {
+            uppercaseCheck.className = 'text-success';
+        } else {
+            uppercaseCheck.className = 'text-danger';
+        }
+        
+        // Verificar número
+        if (/\d/.test(password)) {
+            numberCheck.className = 'text-success';
+        } else {
+            numberCheck.className = 'text-danger';
+        }
+        
+        // Verificar caractere especial
+        if (/[@$!%*?&]/.test(password)) {
+            specialCheck.className = 'text-success';
+        } else {
+            specialCheck.className = 'text-danger';
+        }
+    });
+});
+</script>
 
 @endsection
