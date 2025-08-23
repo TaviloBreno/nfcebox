@@ -11,6 +11,7 @@
 /* Component Styles */
 @import 'components/common.css';
 @import 'components/sidebar.css';
+@import 'components/data-table.css';
 
 /* Page Styles */
 @import 'pages/reports.css';

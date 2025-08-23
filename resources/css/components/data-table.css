@@ -1,0 +1,173 @@
+/**
+ * Data Table Component Styles
+ * 
+ * Styles for the x-data-table component to ensure proper formatting
+ * and responsive behavior
+ */
+
+/* Table Container */
+.table-responsive {
+    border-radius: 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Table Base Styles */
+.table {
+    margin-bottom: 0;
+    background-color: var(--bs-white);
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+}
+
+.table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+/* Striped Rows */
+.table-striped > tbody > tr:nth-of-type(odd) > td {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+/* Hover Effect */
+.table-hover > tbody > tr:hover > td {
+    background-color: rgba(var(--bs-primary-rgb), 0.075);
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* Dark Header */
+.table thead.table-dark th {
+    background-color: var(--bs-dark);
+    border-color: var(--bs-dark);
+    color: var(--bs-white);
+}
+
+/* Action Buttons */
+.table .btn-group {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.table .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .table th,
+    .table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+    }
+    
+    .table .btn-sm {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.625rem;
+    }
+}
+
+/* Search Input */
+.table-search-container {
+    margin-bottom: 1rem;
+}
+
+.table-search-container .input-group {
+    max-width: 300px;
+}
+
+/* Empty State */
+.table-empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--bs-secondary);
+}
+
+.table-empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Sortable Headers */
+.table th[data-sortable="true"] {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.table th[data-sortable="true"]:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table th[data-sort-icon] i {
+    transition: transform 0.2s ease;
+}
+
+.table th[data-sort="asc"] [data-sort-icon] i {
+    transform: rotate(180deg);
+}
+
+/* Text Formatting */
+.font-monospace {
+    font-family: var(--bs-font-monospace) !important;
+}
+
+.text-nowrap {
+    white-space: nowrap !important;
+}
+
+/* Status Badges */
+.badge {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+/* Loading State */
+.table-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.table-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pagination */
+.table-pagination {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.table-pagination .pagination {
+    margin: 0;
+}
+
+.table-info {
+    color: var(--bs-secondary);
+    font-size: 0.875rem;
+}

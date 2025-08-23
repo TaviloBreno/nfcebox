@@ -65,14 +65,14 @@
                             'Cidade',
                             'Ações'
                         ]"
-                        :data="$customers->map(function($customer) {
+                        :data="collect($customers->items())->map(function($customer) {
                             return [
-                                'nome' => '<strong>' . $customer->name . '</strong>',
-                                'documento' => '<span class="font-monospace">' . $customer->formatted_document . '</span>',
-                                'email' => $customer->email,
-                                'telefone' => $customer->phone ? '<span class="font-monospace">' . $customer->formatted_phone . '</span>' : '<span class="text-muted">-</span>',
-                                'cidade' => $customer->address ? ($customer->address['city'] ?? '') . ', ' . ($customer->address['state'] ?? '') : '-',
-                                'acoes' => '<div class="btn-group" role="group"><a href="' . route('customers.show', $customer) . '" class="btn btn-sm btn-outline-info" title="Visualizar"><i class="fas fa-eye"></i></a><a href="' . route('customers.edit', $customer) . '" class="btn btn-sm btn-outline-primary" title="Editar"><i class="fas fa-edit"></i></a><button type="button" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="confirmDelete(' . $customer->id . ', \'' . addslashes($customer->name) . '\');"><i class="fas fa-trash"></i></button></div>'
+                                '<strong>' . e($customer->name) . '</strong>',
+                                '<span class="font-monospace">' . e($customer->formatted_document) . '</span>',
+                                e($customer->email ?: '-'),
+                                $customer->phone ? '<span class="font-monospace">' . e($customer->formatted_phone) . '</span>' : '<span class="text-muted">-</span>',
+                                $customer->address ? e(($customer->address['city'] ?? '') . ', ' . ($customer->address['state'] ?? '')) : '-',
+                                view('customers.partials.actions', ['customer' => $customer])->render()
                             ];
                         })"
                         striped
